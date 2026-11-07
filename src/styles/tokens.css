@@ -1,0 +1,71 @@
+/*
+ * Tokens de design (CLAUDE.md §8). Mobile primeiro: os valores do :root valem
+ * para 390px; o desktop só redefine o que muda.
+ *
+ * Breakpoints (variáveis CSS não funcionam dentro de @media, use os números):
+ *   768px  tablet
+ *   1024px desktop
+ *   1280px desktop largo
+ */
+
+:root {
+  /* Cores */
+  --color-bg: #faf6f0;
+  --color-sand: #f1e8dc;
+  --color-surface: #ffffff;
+  --color-text: #1f2d2b;
+  --color-text-muted: #56625f;
+  --color-primary: #2f5d57;
+  --color-primary-hover: #244a45;
+  --color-primary-soft: #e4ede9;
+  --color-accent: #a9553a; /* nunca sobre --color-sand: contraste < 4,5:1 */
+  --color-accent-on-dark: #f2c9b5;
+  --color-line: #e6dccf;
+  --color-input-border: #cfc3b4;
+  --color-placeholder: #e9dfd2;
+
+  /* Tipografia */
+  --font-heading: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --fs-h1: 38px;
+  --fs-h2: 30px;
+  --fs-body: 16px;
+  --fs-label: 13px;
+  --lh-body: 1.6;
+  --ls-label: 0.08em;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-heading: 500;
+
+  /* Forma */
+  --radius-card: 16px;
+  --radius-card-lg: 18px;
+  --radius-photo: 20px;
+  --radius-photo-lg: 24px;
+  --radius-pill: 999px;
+  --radius-arch: 999px 999px 24px 24px;
+
+  /* Espaço */
+  --space-section: 56px;
+  --gutter: 24px;
+  --container: 1200px;
+  --tap-min: 48px;
+
+  /* Movimento (desligado globalmente com prefers-reduced-motion) */
+  --motion-duration: 700ms;
+  /* prettier-ignore */
+  --motion-ease: cubic-bezier(.2,.7,.2,1);
+  --motion-stagger-hero: 90ms;
+  --motion-stagger: 80ms;
+  --motion-distance: 24px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --fs-h1: 60px;
+    --fs-h2: 44px;
+    --fs-body: 17px;
+    --space-section: 104px;
+  }
+}
