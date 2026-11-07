@@ -1,0 +1,30 @@
+name: Manter Supabase ativo
+
+# Spec 001 (RF-19): o plano gratuito do Supabase pausa o projeto sem uso.
+# Uma leitura semanal (só leitura, com a chave pública) evita a pausa.
+# Requer as variáveis do repositório SUPABASE_URL e SUPABASE_ANON_KEY
+# (Settings › Secrets and variables › Actions › Variables). Sem elas, o job é pulado.
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    name: Leitura em site_content
+    if: ${{ vars.SUPABASE_URL != '' && vars.SUPABASE_ANON_KEY != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ler uma linha da tabela
+        env:
+          SUPABASE_URL: ${{ vars.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ vars.SUPABASE_ANON_KEY }}
+        run: |
+          curl --fail --silent --show-error --max-time 30 \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            "${SUPABASE_URL%/}/rest/v1/site_content?select=section&limit=1"

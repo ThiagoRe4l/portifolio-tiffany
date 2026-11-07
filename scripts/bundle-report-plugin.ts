@@ -44,10 +44,16 @@ export function toBundleReport(bundle: BundleLike): ChunkReport[] {
 }
 
 export function bundleReportPlugin(): Plugin {
+  let isSsrBuild = false;
   return {
     name: 'bundle-report',
     apply: 'build',
+    configResolved(config) {
+      isSsrBuild = Boolean(config.build.ssr);
+    },
     generateBundle(_options, bundle) {
+      // A compilação SSR (pré-renderização) não vai para o navegador.
+      if (isSsrBuild) return;
       this.emitFile({
         type: 'asset',
         fileName: '.vite/bundle-report.json',

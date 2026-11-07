@@ -131,6 +131,33 @@ describe('findForbiddenModules', () => {
       },
     ]);
   });
+
+  // Spec 001 (RNF de performance): Zod, schemas, conteúdo padrão e pré-renderização
+  // ficam no build e no admin; o site no navegador só lê o JSON embutido.
+  it.each([
+    ['node_modules/zod/v4/classic/schemas.js', 'zod (só no build e no admin)'],
+    ['src/content/schema.ts', 'schemas e conteúdo padrão (só no build e no admin)'],
+    ['src/content/fields.ts', 'schemas e conteúdo padrão (só no build e no admin)'],
+    ['src/content/defaults.ts', 'schemas e conteúdo padrão (só no build e no admin)'],
+    ['src/content/load.ts', 'schemas e conteúdo padrão (só no build e no admin)'],
+    ['src/content/transform.ts', 'schemas e conteúdo padrão (só no build e no admin)'],
+    ['src/prerender/head.ts', 'código da pré-renderização (só no build)'],
+    ['src/app/renderSite.tsx', 'código da pré-renderização (só no build)'],
+    ['src/app/entry-server.tsx', 'código da pré-renderização (só no build)'],
+  ])('acusa %s no conjunto inicial', (path, reason) => {
+    const leaked = [{ ...REPORT[0]!, modules: [`${ROOT}/${path}`] }];
+
+    expect(findForbiddenModules(leaked)).toEqual([
+      { file: 'assets/index-A.js', module: `${ROOT}/${path}`, reason },
+    ]);
+  });
+
+  it.each(['src/content/ContentProvider.tsx', 'src/content/embedded.ts', 'src/lib/whatsapp.ts'])(
+    'permite %s no site',
+    (path) => {
+      expect(findForbiddenModules([{ ...REPORT[0]!, modules: [`${ROOT}/${path}`] }])).toEqual([]);
+    },
+  );
 });
 
 describe('checkBudget', () => {

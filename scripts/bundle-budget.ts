@@ -1,8 +1,8 @@
 /**
  * Verificador do orçamento de JS inicial do site (CLAUDE.md §7).
  * Uso: `npm run size` (depois de `npm run build`), ou `node scripts/bundle-budget.ts [pasta-dist]`.
- * Falha se o JS inicial passar de 150 KB gzip ou se contiver código do admin
- * ou o react-router (que só podem existir no chunk do admin).
+ * Falha se o JS inicial passar de 150 KB gzip ou se contiver código do admin,
+ * o react-router, o Zod ou o código de validação e pré-renderização.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -16,6 +16,17 @@ export const BUDGET_BYTES = 150 * 1024;
 const FORBIDDEN = [
   { pattern: /\/src\/admin\//, reason: 'código do admin' },
   { pattern: /\/node_modules\/react-router\//, reason: 'react-router (só pode existir no admin)' },
+  // Spec 001: o site no navegador só lê o JSON embutido; validação e pré-renderização
+  // ficam no build (e, a partir da 004, no admin).
+  { pattern: /\/node_modules\/zod\//, reason: 'zod (só no build e no admin)' },
+  {
+    pattern: /\/src\/content\/(schema|fields|defaults|load|transform)\.ts$/,
+    reason: 'schemas e conteúdo padrão (só no build e no admin)',
+  },
+  {
+    pattern: /\/src\/(prerender\/|app\/(renderSite|entry-server)\.tsx$)/,
+    reason: 'código da pré-renderização (só no build)',
+  },
 ];
 
 export type ForbiddenModule = { file: string; module: string; reason: string };

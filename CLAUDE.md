@@ -120,7 +120,7 @@ Testes da tarefa verdes, suíte completa verde, `lint` e `typecheck` sem erros, 
 | Estilo | CSS Modules + variáveis CSS (tokens em `src/styles/tokens.css`) | Proposto |
 | Animações | Hook próprio com `IntersectionObserver` + CSS (sem biblioteca pesada) | Proposto |
 | Backend | Supabase: Auth (e-mail/senha), Postgres (JSONB) e Storage | Definido (spec 000, 2026-11-05) |
-| Validação | Zod (schemas compartilhados entre site e admin) | Proposto |
+| Validação | Zod 4 (schemas em `src/content/schema.ts`, usados no build e no admin; o site no navegador só lê o JSON embutido) | Definido (spec 001, 2026-11-07) |
 | Lint/format | ESLint (`react/jsx-no-literals` em `src/site/**`) + Prettier | Proposto |
 | Deploy | Cloudflare Pages (plano gratuito permite uso comercial; Vercel Hobby não) | Definido (spec 000, 2026-11-05) |
 | SEO | Pré-renderização no build, com novo deploy disparado ao salvar no admin (deploy hook acionado por função segura no Supabase) | Definido (spec 000, 2026-11-05) |
