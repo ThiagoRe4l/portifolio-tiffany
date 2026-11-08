@@ -8,3 +8,4 @@ package-lock.json
 public/fonts
 *.md
 .vitest
+docs/design
