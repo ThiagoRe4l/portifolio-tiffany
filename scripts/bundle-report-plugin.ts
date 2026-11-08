@@ -1,9 +1,18 @@
 /**
- * Plugin do Vite que grava `dist/.vite/bundle-report.json` com os módulos de
+ * Plugin do Vite que grava `dist-report/bundle-report.json` com os módulos de
  * cada chunk. O manifest do Vite só lista os chunks, e o verificador de bundle
  * (scripts/bundle-budget.ts) precisa saber o que há DENTRO de cada um.
+ * O relatório fica AO LADO da pasta publicada (não vai para a hospedagem).
  */
+import { mkdirSync, writeFileSync } from 'node:fs';
+import { basename, dirname, join, resolve } from 'node:path';
 import type { Plugin } from 'vite';
+
+/** `<pasta>-report/bundle-report.json`, ao lado da pasta publicada. */
+export function reportPathFor(distDir: string): string {
+  const dir = distDir.replace(/[\\/]+$/, '');
+  return join(dirname(dir), `${basename(dir)}-report`, 'bundle-report.json');
+}
 
 export type ChunkReport = {
   file: string;
@@ -45,20 +54,23 @@ export function toBundleReport(bundle: BundleLike): ChunkReport[] {
 
 export function bundleReportPlugin(): Plugin {
   let isSsrBuild = false;
+  let outDir = 'dist';
   return {
     name: 'bundle-report',
     apply: 'build',
     configResolved(config) {
       isSsrBuild = Boolean(config.build.ssr);
+      outDir = resolve(config.root, config.build.outDir);
     },
-    generateBundle(_options, bundle) {
+    writeBundle(options, bundle) {
       // A compilação SSR (pré-renderização) não vai para o navegador.
       if (isSsrBuild) return;
-      this.emitFile({
-        type: 'asset',
-        fileName: '.vite/bundle-report.json',
-        source: JSON.stringify(toBundleReport(bundle as unknown as BundleLike), null, 2),
-      });
+      const reportPath = reportPathFor(options.dir ?? outDir);
+      mkdirSync(dirname(reportPath), { recursive: true });
+      writeFileSync(
+        reportPath,
+        JSON.stringify(toBundleReport(bundle as unknown as BundleLike), null, 2),
+      );
     },
   };
 }

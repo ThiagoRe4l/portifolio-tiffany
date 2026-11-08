@@ -206,13 +206,17 @@ describe('configuração do build', () => {
     );
   });
 
-  it.each(['.gitignore', '.prettierignore'])('%s ignora dist-server', (file) => {
+  it.each(['.gitignore', '.prettierignore'])('%s ignora dist-server e dist-report', (file) => {
     const lines = readFileSync(fromRoot(file), 'utf8').split(/\r?\n/);
 
     expect(lines).toContain('dist-server');
+    expect(lines).toContain('dist-report');
   });
 
-  it('o ESLint ignora dist-server', () => {
-    expect(readFileSync(fromRoot('eslint.config.js'), 'utf8')).toMatch(/['"]dist-server['"]/);
+  it('o ESLint ignora dist-server e dist-report', () => {
+    const config = readFileSync(fromRoot('eslint.config.js'), 'utf8');
+
+    expect(config).toMatch(/['"]dist-server['"]/);
+    expect(config).toMatch(/['"]dist-report['"]/);
   });
 });

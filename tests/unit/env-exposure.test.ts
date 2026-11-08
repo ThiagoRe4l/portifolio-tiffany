@@ -2,9 +2,10 @@
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, relative } from 'node:path';
+import { dirname, join, relative, sep } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { collectInitialChunks, type BundleReport } from '../../scripts/bundle-budget.ts';
+import { reportPathFor } from '../../scripts/bundle-report-plugin.ts';
 import { fromRoot } from '../support/paths';
 
 // T09 — CA-21 (spec 001, RNF de segurança). Variáveis com VITE_ vão para o navegador
@@ -39,13 +40,12 @@ beforeAll(() => {
 
 afterAll(() => {
   rmSync(outDir, { recursive: true, force: true });
+  rmSync(dirname(reportPathFor(outDir)), { recursive: true, force: true });
 });
 
 describe('exposição de variáveis no build (CA-21)', () => {
   it('a URL e a chave do Supabase não estão no JS inicial do site', () => {
-    const report = JSON.parse(
-      readFileSync(join(outDir, '.vite/bundle-report.json'), 'utf8'),
-    ) as BundleReport;
+    const report = JSON.parse(readFileSync(reportPathFor(outDir), 'utf8')) as BundleReport;
     const initial = collectInitialChunks(report);
     expect(initial.length).toBeGreaterThan(0);
 
@@ -65,5 +65,20 @@ describe('exposição de variáveis no build (CA-21)', () => {
     });
 
     expect(leaks).toEqual([]);
+  });
+});
+
+// Pendência do deploy (spec 001, T14): relatórios internos do build não vão para a hospedagem.
+describe('o que vai para a hospedagem', () => {
+  it('a pasta publicada não tem .vite/ (manifest e relatório do bundle)', () => {
+    const internal = listFiles(outDir)
+      .map((file) => relative(outDir, file).split(sep).join('/'))
+      .filter((file) => file.startsWith('.vite/'));
+
+    expect(internal).toEqual([]);
+  });
+
+  it('o relatório do bundle continua existindo, ao lado da pasta publicada', () => {
+    expect(JSON.parse(readFileSync(reportPathFor(outDir), 'utf8'))).toBeInstanceOf(Array);
   });
 });

@@ -7,7 +7,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { gzipSync } from 'node:zlib';
-import type { ChunkReport } from './bundle-report-plugin.ts';
+import { reportPathFor, type ChunkReport } from './bundle-report-plugin.ts';
 
 export type BundleReport = ChunkReport[];
 
@@ -77,7 +77,7 @@ export type BudgetResult = {
 const kb = (bytes: number) => (bytes / 1024).toFixed(1).replace('.', ',');
 
 export function runBudget(distDir: string): BudgetResult {
-  const reportPath = resolve(distDir, '.vite/bundle-report.json');
+  const reportPath = reportPathFor(resolve(distDir));
   if (!existsSync(reportPath)) {
     throw new Error(
       `Relatório do bundle não encontrado em ${reportPath}. Rode npm run build antes.`,

@@ -28,7 +28,14 @@ const TECHNICAL_ATTRIBUTE_VALUES = [
 ];
 
 export default defineConfig([
-  globalIgnores(['dist', 'dist-server', 'coverage', 'playwright-report', 'test-results']),
+  globalIgnores([
+    'dist',
+    'dist-server',
+    'dist-report',
+    'coverage',
+    'playwright-report',
+    'test-results',
+  ]),
 
   js.configs.recommended,
   tseslint.configs.recommended,

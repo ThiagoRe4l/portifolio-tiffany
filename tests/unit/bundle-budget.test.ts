@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import {
   BUDGET_BYTES,
@@ -13,7 +13,7 @@ import {
   runBudget,
   type BundleReport,
 } from '../../scripts/bundle-budget.ts';
-import { toBundleReport } from '../../scripts/bundle-report-plugin.ts';
+import { reportPathFor, toBundleReport } from '../../scripts/bundle-report-plugin.ts';
 import { fromRoot } from '../support/paths';
 
 // RF-09 / CA-09 / CA-03: orçamento de JS inicial e nada do admin no bundle do site.
@@ -51,6 +51,17 @@ const REPORT: BundleReport = [
     modules: [`${ROOT}/node_modules/react-router/dist/production/index.js`],
   },
 ];
+
+describe('reportPathFor', () => {
+  it('guarda o relatório ao lado da pasta publicada, nunca dentro dela', () => {
+    expect(reportPathFor(join('C:', 'projeto', 'dist'))).toBe(
+      join('C:', 'projeto', 'dist-report', 'bundle-report.json'),
+    );
+    expect(reportPathFor(join('C:', 'projeto', 'dist') + '/')).toBe(
+      join('C:', 'projeto', 'dist-report', 'bundle-report.json'),
+    );
+  });
+});
 
 describe('toBundleReport (plugin do build)', () => {
   it('converte a saída do Rollup só com os chunks, em caminhos com "/"', () => {
@@ -186,13 +197,14 @@ describe('runBudget e linha de comando', () => {
     for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
   });
 
-  /** Cria um dist/ falso com o relatório e os arquivos JS. */
+  /** Cria um dist/ falso com os arquivos JS e o relatório ao lado (fora do que é publicado). */
   function fakeDist(files: Record<string, Buffer | string>, report: BundleReport): string {
     const dist = mkdtempSync(join(tmpdir(), 'bundle-budget-'));
-    dirs.push(dist);
-    mkdirSync(join(dist, '.vite'), { recursive: true });
+    const reportPath = reportPathFor(dist);
+    dirs.push(dist, dirname(reportPath));
+    mkdirSync(dirname(reportPath), { recursive: true });
     mkdirSync(join(dist, 'assets'), { recursive: true });
-    writeFileSync(join(dist, '.vite', 'bundle-report.json'), JSON.stringify(report));
+    writeFileSync(reportPath, JSON.stringify(report));
     for (const [file, content] of Object.entries(files)) writeFileSync(join(dist, file), content);
     return dist;
   }

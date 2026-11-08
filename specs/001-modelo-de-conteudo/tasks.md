@@ -208,6 +208,30 @@ Ordem: T01 → T02 → T03 vêm primeiro (o contrato). T04 e T05 são independen
 ### T13 — Fechamento da spec `[x] concluída` (2026-11-07)
 - **Resultado**: `CLAUDE.md` §5 com "Validação" **Definido (spec 001)**; status da spec, do plano e das tarefas como concluídos; quadro de critérios e pendências abaixo.
 
+### T14 — Deploy no Cloudflare Pages `[x] concluída` (2026-11-07)
+Tarefa acrescentada depois do fechamento, com autorização do Thiago ("pode fazer").
+- **Configuração no painel** (feita pelo Thiago; o projeto começou como Worker e foi trocado para **Pages**, como decidido na spec 000):
+
+  | Campo | Valor |
+  |---|---|
+  | Framework preset | `None` |
+  | Build command | `npm run build` |
+  | Build output directory | `dist` |
+  | Root directory | vazio |
+
+  | Variável (Production) | Valor |
+  |---|---|
+  | `NODE_VERSION` | `24` |
+  | `VITE_SUPABASE_URL` | URL do projeto |
+  | `VITE_SUPABASE_ANON_KEY` | chave pública `sb_publishable_…` (nunca a `service_role`) |
+  | `REQUIRE_REMOTE_CONTENT` | `true` |
+  | `SITE_URL` | endereço `*.pages.dev` (trocar se houver domínio próprio) |
+
+  Em Preview basta `NODE_VERSION=24`; sem as demais, os builds de outros branches usam o conteúdo padrão.
+- **Verificado no log** (deploy de 2026-11-07 23:14 UTC, commit `c250459`): Node 24.22.1; `Pré-renderização: 5 arquivos (Supabase)` com `sitemap.xml`; avisos esperados de seções sem linha no banco e de placeholders; `Parsed 1 valid redirect rule`.
+- **Correção feita aqui**: o deploy publicava `.vite/manifest.json` e `.vite/bundle-report.json` (relatórios internos do build). O manifest, que não era usado, foi desligado (`vite.config.ts`); o relatório do bundle agora fica ao lado da pasta publicada, em `dist-report/bundle-report.json` (`reportPathFor` em `scripts/bundle-report-plugin.ts`, lido pelo `npm run size`). `dist-report` entrou nos ignores do git, do Prettier e do ESLint.
+- **Testes**: primeiro vermelhos (11 falhas: `reportPathFor is not a function` e `.vite/` presente na pasta publicada), depois verdes; suíte 601/601; `npm run check` e `format:check` ok; E2E 51/51.
+
 ---
 
 ## Critérios de aceite
@@ -241,4 +265,4 @@ Ordem: T01 → T02 → T03 vêm primeiro (o contrato). T04 e T05 são independen
 - **003**: tabela `admins` e política de escrita em `site_content`; exercitar a recusa de seção fora das 8 com o admin logado; cliente `@supabase/supabase-js` só no chunk do admin.
 - **004**: formulários gerados por `walkSchema` + `fieldMeta`; build anual para atualizar o `{ano}` (agendamento chamando o deploy hook); não permitir apagar seções.
 - **000 / CA-13**: primeiro push com o CI verde e um PR com erro de lint proposital.
-- **Cloudflare (quando houver o que publicar)**: definir `REQUIRE_REMOTE_CONTENT=true`, `SITE_URL` e as variáveis do Supabase no projeto.
+- **Cloudflare**: ✅ configurado na T14. Se houver domínio próprio, trocar o `SITE_URL`.
