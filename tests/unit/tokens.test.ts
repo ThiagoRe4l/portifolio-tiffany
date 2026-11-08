@@ -53,6 +53,24 @@ const MOBILE_TOKENS = {
   '--motion-distance': '24px',
 };
 
+/** Tokens do site público (spec 002, plan D7), com os valores do design de referência. */
+const SITE_TOKENS = {
+  '--color-on-dark': '#d9e6e2',
+  '--color-on-dark-muted': '#afc2bd',
+  '--color-on-dark-line': 'rgba(255, 255, 255, 0.35)',
+  '--color-on-dark-surface': 'rgba(255, 255, 255, 0.1)',
+  '--color-footer': '#1f2d2b',
+  '--color-accent-on-sand': '#934732',
+  '--color-header-bg': 'rgba(250, 246, 240, 0.94)',
+  '--shadow-badge': '0 10px 30px rgba(31, 45, 43, 0.12)',
+  '--shadow-card-hover': '0 12px 28px rgba(31, 45, 43, 0.08)',
+  '--shadow-float': '0 10px 28px rgba(31, 45, 43, 0.28)',
+  '--shadow-header': '0 4px 16px rgba(31, 45, 43, 0.08)',
+  '--gutter-lg': '32px',
+  '--header-h': '73px',
+  '--header-h-lg': '77px',
+};
+
 const DESKTOP_OVERRIDES = {
   '--fs-h1': '60px',
   '--fs-h2': '44px',
@@ -73,6 +91,11 @@ describe('tokens de design (src/styles/tokens.css)', () => {
 
   it.each(Object.entries(DESKTOP_OVERRIDES))('desktop (≥ 1024px): %s = %s', (name, value) => {
     expect(desktop[name]).toBe(value);
+  });
+
+  // Spec 002 (plan D7): valores tirados de docs/design.
+  it.each(Object.entries(SITE_TOKENS))('site (spec 002): %s = %s', (name, value) => {
+    expect(base[name]?.toLowerCase()).toBe(value);
   });
 
   it('o desktop só redefine tamanhos de texto e espaçamento das seções', () => {

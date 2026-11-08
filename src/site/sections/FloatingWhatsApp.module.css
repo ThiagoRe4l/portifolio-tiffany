@@ -1,0 +1,47 @@
+/* Botão flutuante (spec 002, RF-13; valores de docs/design). Abaixo do header. */
+
+a.floating {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 40;
+  width: 60px;
+  height: 60px;
+  min-height: 0;
+  padding: 0;
+  box-shadow: var(--shadow-float);
+}
+
+/* Escondido só na tela: continua dando o nome acessível. */
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  a.floating {
+    right: 32px;
+    bottom: 32px;
+    width: auto;
+    height: auto;
+    min-height: 60px;
+    padding: 0 24px 0 20px;
+  }
+
+  a.floating svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}

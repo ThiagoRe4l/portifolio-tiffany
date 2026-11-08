@@ -25,6 +25,9 @@ const TECHNICAL_ATTRIBUTE_VALUES = [
   'auto',
   'true',
   'false',
+  // Spec 002: blocos de foto sem endereço e mapa incorporado.
+  'img',
+  'no-referrer-when-downgrade',
 ];
 
 export default defineConfig([
@@ -63,6 +66,8 @@ export default defineConfig([
   // Site público: nenhum texto fixo (CLAUDE.md §6.1).
   {
     files: ['src/site/**/*.tsx'],
+    // Testes de componentes usam textos de exemplo; a regra vale para o código do site.
+    ignores: ['src/site/**/*.test.tsx'],
     rules: {
       'react/jsx-no-literals': [
         'error',

@@ -42,9 +42,9 @@ describe('resolveYear', () => {
   it('troca {ano} em qualquer texto, sem alterar o original', () => {
     const resolved = resolveYear(defaultContent, 2031);
 
-    expect(resolved.geral.copyright).toBe('© 2031 [Nome]');
+    expect(resolved.geral.copyright).toBe('© 2031 · Todos os direitos reservados');
     expect(resolved.inicio.title).toBe(defaultContent.inicio.title);
-    expect(defaultContent.geral.copyright).toBe('© {ano} [Nome]');
+    expect(defaultContent.geral.copyright).toBe('© {ano} · Todos os direitos reservados');
   });
 
   it('troca todas as ocorrências', () => {

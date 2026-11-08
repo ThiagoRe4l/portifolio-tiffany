@@ -1,0 +1,15 @@
+/* O header é fixo: o conteúdo começa abaixo dele. */
+.main {
+  padding-top: var(--header-h);
+}
+
+/* O foco chega aqui pelo link "pular": não precisa de contorno na página inteira. */
+.main:focus-visible {
+  outline: none;
+}
+
+@media (min-width: 1024px) {
+  .main {
+    padding-top: var(--header-h-lg);
+  }
+}

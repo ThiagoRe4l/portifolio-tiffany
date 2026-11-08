@@ -1,0 +1,25 @@
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eyebrow {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+[data-tone='onDark'] > .eyebrow {
+  color: var(--color-accent-on-dark);
+}
+
+[data-tone='onSand'] > .eyebrow {
+  color: var(--color-accent-on-sand);
+}
+
+.title {
+  line-height: 1.2;
+}

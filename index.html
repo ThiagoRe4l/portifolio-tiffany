@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#FAF6F0" />
+    <!-- Spec 002 (plan D1): animações só escondem conteúdo depois desta marca; 3 s de trava. -->
+    <!-- prettier-ignore -->
+    <script>(function(d){d.setAttribute('data-motion','pending');setTimeout(function(){if(d.getAttribute('data-motion')!=='ready')d.removeAttribute('data-motion')},3000)})(document.documentElement)</script>
     <link
       rel="preload"
       href="/fonts/inter-latin-wght-normal.woff2"

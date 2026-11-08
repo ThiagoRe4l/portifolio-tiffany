@@ -6,6 +6,7 @@ import {
   resetIntersectionObserverMock,
 } from './intersectionObserver';
 import { installMatchMediaMock, resetMatchMediaMock } from './matchMedia';
+import { installResizeObserverMock, resetResizeObserverMock } from './resizeObserver';
 import { server, startServer, takeUnhandledRequests } from './msw';
 
 // Testes marcados com `// @vitest-environment node` (ex.: lint) não têm DOM.
@@ -19,6 +20,7 @@ beforeEach(() => {
   if (!hasDom) return;
   installIntersectionObserverMock();
   installMatchMediaMock();
+  installResizeObserverMock();
 });
 
 afterEach(() => {
@@ -27,6 +29,7 @@ afterEach(() => {
     document.body.replaceChildren();
     resetIntersectionObserverMock();
     resetMatchMediaMock();
+    resetResizeObserverMock();
   }
   server.resetHandlers();
 

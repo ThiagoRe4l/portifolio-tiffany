@@ -126,6 +126,8 @@ const EXPECTED_KINDS: Record<string, FieldKind> = {
 };
 
 const OPTIONAL_FIELDS = [
+  'geral.footerText',
+  'atuacao.audience[].text',
   'sobre.educationTitle',
   'atuacao.focusTitle',
   'atuacao.audienceTitle',

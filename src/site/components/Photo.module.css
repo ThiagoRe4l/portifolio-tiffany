@@ -1,0 +1,11 @@
+.photo,
+.placeholder {
+  display: block;
+  width: 100%;
+  background-color: var(--color-placeholder);
+}
+
+.photo {
+  height: auto;
+  object-fit: cover;
+}

@@ -79,6 +79,17 @@ describe('bootstrap: site', () => {
     expect(consoleError).not.toHaveBeenCalled();
   });
 
+  // Spec 002, T04 (RF-21): só depois de hidratar as animações podem esconder conteúdo.
+  it('depois de montar o site, marca a página como pronta para animar', async () => {
+    embed(content);
+    document.documentElement.setAttribute('data-motion', 'pending');
+
+    await boot('/');
+
+    expect(document.documentElement.getAttribute('data-motion')).toBe('ready');
+    document.documentElement.removeAttribute('data-motion');
+  });
+
   it('caminho desconhecido volta para "/" e renderiza o site', async () => {
     embed(content);
 

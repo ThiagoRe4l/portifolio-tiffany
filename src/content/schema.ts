@@ -45,7 +45,11 @@ const geral = group('Geral', {
     pattern: /^\p{L}+$/u,
     patternMessage: 'Use só letras',
   }),
-  footerText: longText('Texto do rodapé', { max: 200 }),
+  footerText: longText('Texto do rodapé', {
+    max: 200,
+    optional: true,
+    hint: 'Vazio não aparece no rodapé',
+  }),
   copyright: text('Linha de direitos', {
     max: 100,
     hint: '{ano} vira o ano atual',
@@ -115,7 +119,7 @@ const atuacao = group('Área de atuação', {
     'Público atendido',
     group('Bloco de público', {
       title: text('Título do bloco', { max: 30 }),
-      text: longText('Texto do bloco', { max: 200 }),
+      text: longText('Texto do bloco', { max: 200, optional: true }),
     }),
     { min: 1, max: 4 },
   ),

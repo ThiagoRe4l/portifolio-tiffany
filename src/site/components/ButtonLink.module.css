@@ -1,0 +1,50 @@
+/* Botões do design (docs/design): pílula, 52px no mobile, 54px no desktop. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-pill);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  overflow-wrap: anywhere; /* o botão encolhe até caber, mesmo com uma palavra só */
+  text-align: center;
+  text-decoration: none;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.button svg {
+  flex: none;
+}
+
+.button[data-variant='primary'] {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.button[data-variant='ghost'] {
+  border-color: var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button[data-variant='primary']:hover {
+    background: var(--color-primary-hover);
+  }
+
+  .button[data-variant='ghost']:hover {
+    background: var(--color-primary-soft);
+  }
+}
+
+@media (min-width: 1024px) {
+  .button {
+    min-height: 54px;
+  }
+}

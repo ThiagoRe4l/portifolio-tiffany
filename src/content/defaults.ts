@@ -1,8 +1,9 @@
 import type { SiteContent } from './types';
 
 /**
- * Conteúdo padrão (spec 001, RF-08). Textos aprovados do CLAUDE.md §8, rótulos de
- * interface do design e placeholders `[...]` para todo o resto. Nada sobre a
+ * Conteúdo padrão (spec 001, RF-08; ajustes A1–A3 da spec 002). Textos aprovados do
+ * CLAUDE.md §8, textos do design de referência (docs/design), rótulos de interface e
+ * placeholders `[...]` para todo o resto. Opcionais que o design não mostra ficam vazios. Nada sobre a
  * psicóloga é inventado: ela preenche os placeholders no admin.
  */
 
@@ -22,12 +23,12 @@ function deepFreeze<T>(value: T): T {
 
 export const defaultContent: SiteContent = deepFreeze({
   geral: {
-    name: '[Nome]',
+    name: '[Nome Sobrenome]',
     profession: 'Psicóloga',
-    crp: '[CRP 00/00000]',
+    crp: 'CRP [00/00000]',
     initials: PLACEHOLDER_INITIALS,
-    footerText: '[Texto do rodapé]',
-    copyright: '© {ano} [Nome]',
+    footerText: '',
+    copyright: '© {ano} · Todos os direitos reservados',
     restrictedAreaLink: 'Área restrita',
     menu: {
       about: 'Sobre mim',
@@ -56,16 +57,17 @@ export const defaultContent: SiteContent = deepFreeze({
     photo: { src: '', width: 800, height: 1000, alt: '[Descreva a foto principal]' },
     badge: {
       title: 'Clínica especializada em TEA',
-      subtitle: '[Cidade · modalidade]',
+      subtitle: '[Cidade] · [presencial]',
     },
   },
   sobre: {
     eyebrow: 'Sobre mim',
     title: 'Olá, eu sou a [Nome].',
     photo: { src: '', width: 800, height: 1000, alt: '[Descreva a sua foto]' },
-    text: '[Primeiro parágrafo sobre você]',
-    secondaryText: '[Segundo parágrafo sobre você]',
-    educationTitle: 'Formação',
+    text: 'Sou psicóloga e atuo em uma clínica especializada no atendimento de pessoas com Transtorno do Espectro Autista. Meu trabalho é guiado pela Análise do Comportamento, que olha para cada pessoa de forma individual e constrói o caminho a partir do que ela já sabe fazer.',
+    secondaryText:
+      'Sigo estudando: curso pós-graduação em Análise do Comportamento aplicada ao TEA, porque um bom atendimento depende de atualização constante.',
+    educationTitle: '',
     education: [
       'Graduação em Psicologia — [Instituição, ano]',
       'Pós-graduação em Análise do Comportamento aplicada ao TEA — em andamento',
@@ -74,35 +76,35 @@ export const defaultContent: SiteContent = deepFreeze({
   },
   trabalho: {
     eyebrow: 'Meu trabalho',
-    title: '[Título da seção Meu trabalho]',
+    title: 'Como posso ajudar',
     cards: [
       {
         icon: 'clipboard',
         title: 'Avaliação comportamental',
-        text: '[Texto sobre a avaliação comportamental]',
+        text: 'Observação e levantamento das habilidades e necessidades da criança para definir objetivos claros.',
       },
       {
-        icon: 'puzzle',
+        icon: 'target',
         title: 'Intervenção individualizada',
-        text: '[Texto sobre a intervenção individualizada]',
+        text: 'Planos baseados em Análise do Comportamento, com metas acompanhadas de perto a cada etapa.',
       },
       {
         icon: 'family',
         title: 'Orientação parental',
-        text: '[Texto sobre a orientação parental]',
+        text: 'Encontros com a família para levar as estratégias para a rotina de casa.',
       },
       {
         icon: 'school',
         title: 'Parceria com escola e equipe',
-        text: '[Texto sobre a parceria com escola e equipe]',
+        text: 'Diálogo com a escola e outros profissionais para que todos caminhem na mesma direção.',
       },
     ],
   },
   atuacao: {
     eyebrow: 'Área de atuação',
     title: 'Transtorno do Espectro Autista (TEA)',
-    text: '[Texto sobre a área de atuação]',
-    focusTitle: '[Título das etiquetas de foco]',
+    text: 'O TEA se manifesta de forma diferente em cada pessoa. Por isso o atendimento parte da realidade de cada criança e da sua família, com foco em comunicação, interação social, autonomia e comportamento.',
+    focusTitle: '',
     focusTags: [
       'Comunicação',
       'Habilidades sociais',
@@ -110,25 +112,34 @@ export const defaultContent: SiteContent = deepFreeze({
       'Manejo de comportamentos',
       'Orientação familiar',
     ],
-    audienceTitle: 'Público atendido',
+    audienceTitle: '',
     audience: [
-      { title: 'Crianças', text: '[Texto sobre o atendimento de crianças]' },
-      { title: 'Adolescentes', text: '[Texto sobre o atendimento de adolescentes]' },
-      { title: 'Famílias', text: '[Texto sobre o trabalho com as famílias]' },
+      { title: 'Crianças', text: '' },
+      { title: 'Adolescentes', text: '' },
+      { title: 'Famílias', text: '' },
     ],
   },
   comoFunciona: {
     eyebrow: 'Como funciona',
-    title: '[Título da seção Como funciona]',
+    title: 'Do primeiro contato ao acompanhamento',
     steps: [
-      { title: 'Primeiro contato', text: '[Texto sobre o primeiro contato]' },
-      { title: 'Avaliação inicial', text: '[Texto sobre a avaliação inicial]' },
-      { title: 'Plano e acompanhamento', text: '[Texto sobre o plano e o acompanhamento]' },
+      {
+        title: 'Primeiro contato',
+        text: 'Você me chama pelo WhatsApp e conversamos sobre a sua necessidade.',
+      },
+      {
+        title: 'Avaliação inicial',
+        text: 'Conheço a criança e a família e definimos juntos os objetivos do atendimento.',
+      },
+      {
+        title: 'Plano e acompanhamento',
+        text: 'Montamos o plano de intervenção e acompanhamos a evolução com devolutivas à família.',
+      },
     ],
   },
   espaco: {
     eyebrow: 'O espaço',
-    title: '[Título da seção O espaço]',
+    title: 'Um ambiente pensado para acolher',
     photos: [
       {
         photo: { src: '', width: 1200, height: 900, alt: '[Descreva a foto 1 do espaço]' },
@@ -147,18 +158,18 @@ export const defaultContent: SiteContent = deepFreeze({
   contato: {
     eyebrow: 'Contato',
     title: 'Vamos conversar?',
-    text: '[Texto da seção de contato]',
+    text: 'Tire suas dúvidas ou agende uma avaliação. Respondo pelo WhatsApp em [horário de resposta].',
     whatsapp: {
       number: PLACEHOLDER_WHATSAPP,
       message: 'Olá! Vim pelo site e gostaria de saber mais sobre o atendimento.',
-      buttonText: 'Agendar pelo WhatsApp',
+      buttonText: 'Chamar no WhatsApp',
     },
     floatingButton: { enabled: true, text: 'Fale comigo' },
     instagram: { handle: '', buttonText: 'Instagram' },
     email: { address: '', buttonText: 'E-mail' },
     phone: { number: '', buttonText: 'Ligar' },
-    address: { title: 'Endereço', text: '[Rua, número, bairro, cidade]' },
-    hours: { title: 'Horários', text: '[Dias e horários de atendimento]' },
+    address: { title: 'Endereço', text: '[Rua, número — Bairro, Cidade]' },
+    hours: { title: 'Horários', text: '[Seg a sex, 8h às 18h]' },
     map: { embedUrl: '', title: '[Título do mapa para leitores de tela]' },
   },
 });

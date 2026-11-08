@@ -118,7 +118,7 @@ describe('index.html gerado', async () => {
     expect(JSON.parse(jsonLd?.textContent ?? '')['@type']).toBe('Psychologist');
     expect(embedded?.getAttribute('type')).toBe('application/json');
     const content = JSON.parse(embedded?.textContent ?? '');
-    expect(content.geral.copyright).toBe('© 2027 [Nome]');
+    expect(content.geral.copyright).toBe('© 2027 · Todos os direitos reservados');
     expect(content.inicio).toEqual(defaultContent.inicio);
   });
 

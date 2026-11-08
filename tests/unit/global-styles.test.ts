@@ -33,6 +33,22 @@ describe('global.css', () => {
     expect(block).toMatch(/scroll-behavior: auto !important/);
   });
 
+  // Spec 002 (RF-03): link "pular para o conteúdo", visível só com o foco do teclado.
+  it('o link "pular para o conteúdo" fica fora da tela e aparece com o foco', () => {
+    const css = compact(read('src/styles/global.css'));
+
+    expect(css).toMatch(/\.skip-link \{[^}]*position: (absolute|fixed)/);
+    expect(css).toMatch(/\.skip-link \{[^}]*transform: translateY\(-\d+%\)/);
+    expect(css).toMatch(/\.skip-link:focus(-visible)? \{[^}]*transform: none/);
+  });
+
+  // Spec 002 (RF-02): as âncoras descontam a altura do header fixo.
+  it('as seções com id descontam a altura do header ao rolar até a âncora', () => {
+    expect(compact(read('src/styles/global.css'))).toMatch(
+      /\[id\] \{[^}]*scroll-margin-top: var\(--header-h\)/,
+    );
+  });
+
   it('define foco visível', () => {
     expect(compact(read('src/styles/global.css'))).toMatch(/:focus-visible \{[^}]*outline:/);
   });

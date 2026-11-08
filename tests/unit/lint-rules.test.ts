@@ -84,6 +84,65 @@ export function Example({ title, url, src, alt }: { title: string; url: string; 
   });
 });
 
+// Spec 002 (plan D8): valores técnicos do site público e SVG com geometria em variáveis.
+describe('site público (spec 002)', () => {
+  it('permite role="img" e referrerPolicy do mapa', async () => {
+    const code = `
+export function Example({ alt, src, title }: { alt: string; src: string; title: string }) {
+  return (
+    <section>
+      <div role="img" aria-label={alt} />
+      <iframe src={src} title={title} loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+    </section>
+  );
+}
+`;
+    expect(await lint('src/site/Example.tsx', code)).toEqual([]);
+  });
+
+  it('permite SVG com a geometria vinda de variáveis (icons/paths.ts)', async () => {
+    const code = `
+const VIEW_BOX = '0 0 24 24';
+const PATH = 'M4 7h16M4 12h16M4 17h16';
+
+export function Example() {
+  return (
+    <svg viewBox={VIEW_BOX} aria-hidden="true" focusable="false">
+      <path d={PATH} />
+    </svg>
+  );
+}
+`;
+    expect(await lint('src/site/Example.tsx', code)).toEqual([]);
+  });
+
+  it('testes de componentes em src/site podem usar textos de exemplo', async () => {
+    expect(await ruleIds('src/site/components/Example.test.tsx', LITERAL_TEXT)).not.toContain(
+      'react/jsx-no-literals',
+    );
+    expect(await ruleIds('src/site/components/Example.tsx', LITERAL_TEXT)).toContain(
+      'react/jsx-no-literals',
+    );
+  });
+
+  it('continua barrando geometria e textos escritos direto no JSX', async () => {
+    const code = `
+export function Example() {
+  return (
+    <svg viewBox="0 0 24 24" aria-label="Ícone de menu">
+      <path d="M4 7h16" />
+    </svg>
+  );
+}
+`;
+    const literalErrors = (await lint('src/site/Example.tsx', code)).filter(
+      (message) => message.ruleId === 'react/jsx-no-literals',
+    );
+
+    expect(literalErrors).toHaveLength(3);
+  });
+});
+
 describe('HTML bruto proibido (react/no-danger)', () => {
   it.each(['src/site/Example.tsx', 'src/admin/Example.tsx', 'src/lib/Example.tsx'])(
     'bloqueia dangerouslySetInnerHTML em %s',

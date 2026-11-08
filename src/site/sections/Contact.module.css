@@ -1,0 +1,198 @@
+/*
+ * Contato (spec 002, RF-11; valores de docs/design). Mobile: botões e, abaixo, um
+ * bloco areia com endereço, horários e mapa. A partir de 1024px: tudo num cartão
+ * areia, com o mapa à direita (se existir); o bloco interno se desfaz (contents).
+ */
+
+.inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: var(--space-section) var(--gutter);
+}
+
+.card,
+.copy,
+.actions {
+  display: flex;
+  flex-direction: column;
+}
+
+.card,
+.copy {
+  gap: 20px;
+}
+
+.actions {
+  gap: 12px;
+}
+
+.text {
+  color: var(--color-text-muted);
+}
+
+.actions a.whatsapp {
+  min-height: 56px;
+}
+
+.channels {
+  display: flex;
+  gap: 8px;
+}
+
+.channels a.channel {
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  min-height: 76px;
+  padding: 8px 4px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 13px;
+  font-weight: var(--fw-medium);
+  overflow-wrap: anywhere;
+}
+
+.channels a.channel svg {
+  color: var(--color-primary);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px;
+  border-radius: var(--radius-card);
+  background: var(--color-sand);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.line {
+  display: flex;
+  gap: 12px;
+}
+
+.phoneLine {
+  display: none;
+}
+
+.lineIcon {
+  flex: none;
+  margin-top: 3px;
+  color: var(--color-primary);
+}
+
+.lineText {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-line;
+}
+
+/* O padding amplia a área de toque sem mudar o ritmo das linhas. */
+.phoneLink {
+  display: inline-block;
+  margin-block: -11px;
+  padding-block: 11px;
+  color: var(--color-text);
+}
+
+.map {
+  display: block;
+  width: 100%;
+  height: 150px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--color-placeholder);
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    padding: var(--space-section) var(--gutter-lg);
+  }
+
+  .card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'copy'
+      'lines';
+    gap: 20px 48px;
+    padding: 56px;
+    border-radius: 28px;
+    background: var(--color-sand);
+  }
+
+  .card[data-map] {
+    /* A coluna de texto comporta WhatsApp, Instagram e e-mail numa linha (RF-11). */
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      'copy map'
+      'lines map';
+  }
+
+  .copy {
+    grid-area: copy;
+  }
+
+  .actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .actions a.whatsapp {
+    min-height: 54px;
+  }
+
+  .channels {
+    display: contents;
+  }
+
+  .channels a.channel {
+    flex: none;
+    flex-direction: row;
+    gap: 8px;
+    min-height: 54px;
+    padding: 0 22px;
+    border-color: transparent;
+    border-radius: var(--radius-pill);
+    font-size: inherit;
+  }
+
+  .channels a.channel svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .channels a.callCard {
+    display: none;
+  }
+
+  .info {
+    display: contents;
+  }
+
+  .lines {
+    grid-area: lines;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .phoneLine {
+    display: flex;
+  }
+
+  .map {
+    grid-area: map;
+    height: 100%;
+    min-height: 360px;
+    border-radius: var(--radius-photo);
+  }
+}

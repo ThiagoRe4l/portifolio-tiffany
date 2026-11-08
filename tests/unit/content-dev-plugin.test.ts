@@ -83,7 +83,9 @@ describe('npm run dev: HTML do site', () => {
     expect(title).toBe(defaultContent.geral.seoTitle);
     expect(html).toContain('<script id="site-content" type="application/json">');
     expect(html).toContain('<script type="application/ld+json">');
-    expect(root).toMatch(/^<main/);
+    expect(root).toMatch(/^<a [^>]*href="#conteudo"/);
+    expect(root).toContain('<header');
+    expect(root).toContain('<main');
     expect(html).toContain('/@vite/client');
   }, 30_000);
 

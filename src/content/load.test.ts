@@ -229,7 +229,7 @@ describe('ajustes finais', () => {
   it('{ano} vira o ano do build', async () => {
     const { content } = await load({});
 
-    expect(content.geral.copyright).toBe('© 2027 [Nome]');
+    expect(content.geral.copyright).toBe('© 2027 · Todos os direitos reservados');
   });
 
   it('placeholders restantes: aviso na hospedagem, listando os campos', async () => {
@@ -241,7 +241,7 @@ describe('ajustes finais', () => {
     expect(warning).toMatch(/geral\.name/);
     expect(warning).toMatch(/geral\.initials/);
     expect(warning).toMatch(/contato\.whatsapp\.number/);
-    expect(warning).toMatch(/trabalho\.cards\.0\.text/);
+    expect(warning).toMatch(/contato\.text/);
   });
 
   it('placeholders no dev não geram aviso', async () => {
@@ -258,6 +258,6 @@ describe('ajustes finais', () => {
     expect(defaultContent.inicio.title).toBe(
       'Cada criança no seu tempo, com acolhimento e ciência.',
     );
-    expect(defaultContent.geral.copyright).toBe('© {ano} [Nome]');
+    expect(defaultContent.geral.copyright).toBe('© {ano} · Todos os direitos reservados');
   });
 });

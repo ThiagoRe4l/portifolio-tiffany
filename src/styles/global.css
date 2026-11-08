@@ -40,6 +40,7 @@ body {
   font-size: var(--fs-body);
   font-weight: var(--fw-regular);
   line-height: var(--lh-body);
+  overflow-wrap: break-word; /* palavra maior que a tela quebra em vez de estourar */
   -webkit-font-smoothing: antialiased;
 }
 
@@ -118,4 +119,39 @@ a {
   html {
     scroll-behavior: auto !important;
   }
+}
+
+/* Âncoras descontam o header fixo (spec 002, RF-02). */
+[id] {
+  scroll-margin-top: var(--header-h);
+}
+
+@media (min-width: 1024px) {
+  [id] {
+    scroll-margin-top: var(--header-h-lg);
+  }
+}
+
+/* "Pular para o conteúdo": fora da tela até receber o foco do teclado (spec 002, RF-03). */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-weight: var(--fw-semibold);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* Menu do header aberto: a página por trás não rola (spec 002, RF-04). */
+html[data-menu-open] {
+  overflow: hidden;
 }

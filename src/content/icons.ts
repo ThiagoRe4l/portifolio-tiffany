@@ -5,8 +5,8 @@
 export const ICONS = [
   { id: 'clipboard', label: 'Prancheta (avaliação)' },
   { id: 'puzzle', label: 'Quebra-cabeça' },
-  { id: 'family', label: 'Família' },
-  { id: 'school', label: 'Escola' },
+  { id: 'family', label: 'Casa (família)' },
+  { id: 'school', label: 'Pessoas (escola e equipe)' },
   { id: 'chat', label: 'Conversa' },
   { id: 'heart', label: 'Coração' },
   { id: 'star', label: 'Estrela' },

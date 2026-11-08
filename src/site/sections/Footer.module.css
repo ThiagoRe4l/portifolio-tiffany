@@ -1,0 +1,89 @@
+/* Rodapé (spec 002, RF-12; valores de docs/design). */
+
+.footer {
+  background: var(--color-footer);
+  color: var(--color-on-dark);
+  font-size: 14px;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 32px var(--gutter);
+}
+
+/* Espaço para o botão flutuante não cobrir o link no fim da página (RF-13). */
+.footer[data-floating] .inner {
+  padding-bottom: 96px;
+}
+
+.identity,
+.legal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.name {
+  color: var(--color-surface);
+  font-family: var(--font-heading);
+  font-size: 18px;
+}
+
+.legal {
+  color: var(--color-on-dark-muted);
+}
+
+/* O padding amplia a área de toque sem mudar o ritmo das linhas. */
+.restricted {
+  align-self: flex-start;
+  margin-block: -14px;
+  padding-block: 14px;
+  color: var(--color-on-dark-muted);
+  font-size: 13px;
+}
+
+@media (min-width: 1024px) {
+  .footer {
+    font-size: 15px;
+  }
+
+  .inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 48px;
+    padding: 40px var(--gutter-lg);
+  }
+
+  .footer[data-floating] .inner {
+    padding-bottom: 112px;
+  }
+
+  .identity {
+    gap: 4px;
+  }
+
+  .name {
+    font-size: 20px;
+  }
+
+  .legal {
+    flex: none;
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    max-width: 60%;
+  }
+
+  .restricted {
+    flex: none;
+    align-self: center;
+    font-size: inherit;
+  }
+}

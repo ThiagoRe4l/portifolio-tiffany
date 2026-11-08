@@ -1,0 +1,211 @@
+/*
+ * Header fixo (spec 002, RF-04; valores de docs/design). Mobile primeiro:
+ * < 768 marca + menu · 768–1279 + botão do topo · ≥ 1280 os 6 links (sem data-nav).
+ */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  background: var(--color-header-bg);
+  border-bottom: 1px solid var(--color-line);
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.header[data-scrolled] {
+  background: var(--color-bg);
+  box-shadow: var(--shadow-header);
+}
+
+.row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+  max-width: var(--container);
+  min-height: var(--header-h);
+  margin: 0 auto;
+  padding: 12px 16px 12px var(--gutter);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-right: auto;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.monogram {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-family: var(--font-heading);
+  font-size: 17px;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.2;
+}
+
+.name {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: var(--fw-heading);
+  overflow-wrap: anywhere;
+}
+
+.credential {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.nav {
+  display: none;
+  flex: none;
+}
+
+.nav ul {
+  display: flex;
+  gap: 24px;
+  padding: 0;
+  list-style: none;
+}
+
+.nav a {
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.row .cta {
+  display: none;
+  flex: none;
+  min-height: 44px;
+  padding: 0 22px;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.menuButton {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+/* Painel do menu (aberto pelo botão; o atributo hidden esconde). */
+.panel {
+  max-height: calc(100dvh - var(--header-h));
+  overflow-y: auto;
+  border-top: 1px solid var(--color-line);
+  background: var(--color-bg);
+}
+
+.panel nav {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 8px var(--gutter) 24px;
+}
+
+.panelLinks {
+  padding: 0;
+  list-style: none;
+}
+
+.panelLinks a {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-min);
+  border-bottom: 1px solid var(--color-line);
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+}
+
+.panel .panelCta {
+  width: 100%;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav a:hover,
+  .panelLinks a:hover {
+    color: var(--color-primary);
+  }
+
+  .menuButton:hover {
+    background: var(--color-primary-soft);
+  }
+}
+
+@media (min-width: 768px) {
+  .row .cta {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 1024px) {
+  .row {
+    gap: 24px;
+    min-height: var(--header-h-lg);
+    padding: 16px var(--gutter-lg);
+  }
+
+  .monogram {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .name {
+    font-size: 19px;
+  }
+
+  .credential {
+    font-size: 13px;
+  }
+
+  .panel {
+    max-height: calc(100dvh - var(--header-h-lg));
+  }
+}
+
+/* ≥ 1280: os 6 links, se couberem (useNavFits marca data-nav="compact" se não). */
+@media (min-width: 1280px) {
+  .header:not([data-nav]) .nav {
+    display: block;
+  }
+
+  .header:not([data-nav]) .menuButton,
+  .header:not([data-nav]) .panel {
+    display: none;
+  }
+}

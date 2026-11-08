@@ -2,6 +2,7 @@ import { StrictMode, type ReactNode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { ContentProvider } from '@/content/ContentProvider';
 import { readEmbeddedContent } from '@/content/embedded';
+import { markMotionReady } from '@/site/motion/motionState';
 import { SitePage } from '@/site/SitePage';
 import { resolveEntry } from './resolveEntry';
 
@@ -46,7 +47,10 @@ export async function bootstrap(
 
   if (rootElement.firstElementChild) {
     const root = hydrateRoot(rootElement, <StrictMode>{site}</StrictMode>);
+    markMotionReady();
     return () => root.unmount();
   }
-  return mount(rootElement, site);
+  const unmount = mount(rootElement, site);
+  markMotionReady();
+  return unmount;
 }

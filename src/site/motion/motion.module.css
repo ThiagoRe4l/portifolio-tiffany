@@ -1,0 +1,98 @@
+/*
+ * Animações do site (spec 002, RF-17 a RF-21; valores do CLAUDE.md §8).
+ * O estado escondido só existe sob [data-motion] (marcado por um script inline e
+ * confirmado depois da hidratação): sem JavaScript, nada fica invisível.
+ * Uso: classe + `style={{ '--i': n }}` para a sequência.
+ */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(var(--motion-distance));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Revelar ao rolar (useReveal marca data-revealed a 15% visível). */
+[data-motion] .reveal {
+  opacity: 0;
+  transform: translateY(var(--motion-distance));
+}
+
+.reveal[data-revealed] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--motion-duration) var(--motion-ease),
+    transform var(--motion-duration) var(--motion-ease);
+  transition-delay: calc(var(--i, 0) * var(--motion-stagger));
+}
+
+/* Entrada do hero, em sequência de 90ms. */
+[data-motion] .enter {
+  animation: fadeUp var(--motion-duration) var(--motion-ease) both;
+  animation-delay: calc(var(--i, 0) * var(--motion-stagger-hero));
+}
+
+/* Botão flutuante: entra depois de 600ms com um pequeno "pop". */
+[data-motion] .pop {
+  animation: pop 0.5s var(--motion-ease) 600ms both;
+}
+
+/* Hover do desktop: card sobe 4px com sombra; foto da galeria com zoom. */
+.lift {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.zoom {
+  overflow: hidden;
+}
+
+.zoom > * {
+  transition: transform 0.4s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .zoom:hover > * {
+    transform: scale(1.03);
+  }
+}
+
+/* Movimento reduzido: tudo no estado final, nada anima (teste obrigatório). */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .enter,
+  .pop,
+  .lift,
+  .zoom,
+  .zoom > * {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
