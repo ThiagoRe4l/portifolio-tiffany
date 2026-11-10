@@ -116,7 +116,7 @@ Testes da tarefa verdes, suíte completa verde, `lint` e `typecheck` sem erros, 
 | Tema | Decisão | Status |
 |---|---|---|
 | Framework | React + TypeScript (`strict: true`), Vite | Definido |
-| Rotas | React Router (`/`, `/admin/login`, `/admin`) | Proposto |
+| Rotas | React Router só no admin (`/admin/login`, `/admin/recuperar-senha`, `/admin/nova-senha`, `/admin` protegida); o site `/` não usa roteador | Definido (spec 003, 2026-11-09) |
 | Estilo | CSS Modules + variáveis CSS (tokens em `src/styles/tokens.css`) | Definido (spec 002, 2026-11-07) |
 | Animações | Hook próprio com `IntersectionObserver` + CSS (sem biblioteca pesada) | Definido (spec 002, 2026-11-07) |
 | Backend | Supabase: Auth (e-mail/senha), Postgres (JSONB) e Storage | Definido (spec 000, 2026-11-05) |

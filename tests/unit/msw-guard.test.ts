@@ -22,6 +22,12 @@ describe('guarda do MSW', () => {
     expect(takeUnhandledRequests()).toEqual([]);
   });
 
+  // Spec 003: o .env local tem as credenciais reais, e os testes não podem enxergá-las.
+  it('o SDK do Supabase nos testes aponta sempre para o endereço falso', () => {
+    expect(import.meta.env.VITE_SUPABASE_URL).toBe('https://test.supabase.co');
+    expect(import.meta.env.VITE_SUPABASE_ANON_KEY).toBe('chave-publica-de-teste');
+  });
+
   it('remove handlers de um teste antes do próximo', async () => {
     // O handler registrado no teste anterior não pode vazar para este.
     await expect(fetch('https://api.example.test/com-handler')).rejects.toThrow();

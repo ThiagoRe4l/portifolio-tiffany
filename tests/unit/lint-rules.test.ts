@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { ESLint } from 'eslint';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { fromRoot } from '../support/paths';
 
 // CA-06: as regras de lint que protegem o conteúdo editável e a acessibilidade.
@@ -8,6 +8,9 @@ import { fromRoot } from '../support/paths';
 // para não deixar arquivos "ruins" no repositório.
 
 let eslint: ESLint;
+
+// A análise com tipos fica lenta com a máquina ocupada (ex.: no `npm run check`).
+vi.setConfig({ testTimeout: 30_000 });
 
 beforeAll(async () => {
   eslint = new ESLint({ cwd: fromRoot() });

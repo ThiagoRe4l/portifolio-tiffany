@@ -1,8 +1,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { adminRoutes } from './adminRoutes';
+import { AuthProvider } from './auth/AuthProvider';
+import { consumeRecoveryHash } from './auth/recoveryHash';
 
+consumeRecoveryHash();
 const router = createBrowserRouter(adminRoutes);
 
 export function AdminApp() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }

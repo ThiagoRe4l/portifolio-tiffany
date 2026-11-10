@@ -155,6 +155,9 @@ describe('findForbiddenModules', () => {
     ['src/prerender/head.ts', 'código da pré-renderização (só no build)'],
     ['src/app/renderSite.tsx', 'código da pré-renderização (só no build)'],
     ['src/app/entry-server.tsx', 'código da pré-renderização (só no build)'],
+    // Spec 003 (RF-15, CA-15): o SDK e os pacotes dele entram só no admin.
+    ['node_modules/@supabase/supabase-js/dist/index.mjs', 'SDK do Supabase (só no admin)'],
+    ['node_modules/@supabase/auth-js/dist/module/index.js', 'SDK do Supabase (só no admin)'],
   ])('acusa %s no conjunto inicial', (path, reason) => {
     const leaked = [{ ...REPORT[0]!, modules: [`${ROOT}/${path}`] }];
 
@@ -246,6 +249,20 @@ describe('runBudget e linha de comando', () => {
 
     expect(result.ok).toBe(false);
     expect(result.problems.join('\n')).toMatch(/código do admin/);
+  });
+
+  it('reprova quando o SDK do Supabase está no conjunto inicial, mesmo pequeno', () => {
+    const report = [
+      {
+        ...SMALL_REPORT[0]!,
+        modules: [`${ROOT}/node_modules/@supabase/supabase-js/dist/index.mjs`],
+      },
+    ];
+
+    const result = runBudget(fakeDist(SMALL, report));
+
+    expect(result.ok).toBe(false);
+    expect(result.problems.join('\n')).toMatch(/SDK do Supabase/);
   });
 
   it('explica o que fazer quando não há build', () => {

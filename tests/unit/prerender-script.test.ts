@@ -186,13 +186,8 @@ export async function prerender({ env }) {
     expect(output).toMatch(/--offline.*REQUIRE_REMOTE_CONTENT/s);
   });
 
-  it('npm run test:e2e faz o build offline', () => {
-    const { scripts } = JSON.parse(readFileSync(fromRoot('package.json'), 'utf8')) as {
-      scripts: Record<string, string>;
-    };
-
-    expect(scripts['test:e2e']).toBe('npm run build -- --offline && playwright test');
-  });
+  // Spec 003: o build do E2E passou para scripts/e2e-build.ts, que mantém o --offline
+  // (provado em tests/unit/e2e-build.test.ts).
 });
 
 describe('configuração do build', () => {

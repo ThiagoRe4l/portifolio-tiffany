@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { mockSupabase } from './support/supabase';
 
 // CA-03 (parte E2E): o visitante do site nunca baixa o código do admin.
 
@@ -42,8 +43,11 @@ test('caminho desconhecido do site volta para "/" sem baixar o admin', async ({ 
   expect(scripts.filter((url) => ADMIN_CHUNK.test(url))).toEqual([]);
 });
 
-test('caminho desconhecido do admin volta para "/admin"', async ({ page }) => {
+// Spec 003 (RF-09): sem sessão, o "/admin" para onde o caminho volta leva ao login.
+test('caminho desconhecido do admin, sem sessão, termina no login', async ({ page }) => {
+  await mockSupabase(page);
+
   await page.goto('/admin/nao-existe');
 
-  await expect(page).toHaveURL(/\/admin$/);
+  await expect(page).toHaveURL(/\/admin\/login$/);
 });

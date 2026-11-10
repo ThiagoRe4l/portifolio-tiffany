@@ -1,0 +1,24 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form button[type='submit'] {
+  margin-top: 8px;
+}
+
+.forgot {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  min-height: var(--tap-min);
+  color: var(--color-primary);
+  font-size: 14px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .forgot:hover {
+    color: var(--color-primary-hover);
+  }
+}

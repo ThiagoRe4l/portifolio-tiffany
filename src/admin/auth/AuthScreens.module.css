@@ -1,0 +1,19 @@
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  color: var(--color-text-muted);
+}
+
+.loading p,
+.message p {
+  margin: 0;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: center;
+}

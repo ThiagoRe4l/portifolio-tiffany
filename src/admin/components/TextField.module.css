@@ -1,0 +1,55 @@
+/* Campos do design (docs/design/admin-login): 52px, raio 12px. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+}
+
+.control {
+  position: relative;
+  display: flex;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 16px; /* abaixo disso, o iPhone aproxima a tela ao focar */
+}
+
+.input[data-trailing] {
+  padding-right: 56px;
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+.input:focus-visible {
+  border-color: var(--color-primary);
+  outline-width: 2px;
+  outline-offset: 1px;
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--color-accent-on-sand);
+}
+
+.error {
+  margin: 0;
+  color: var(--color-accent-on-sand);
+  font-size: 14px;
+  line-height: 1.4;
+}

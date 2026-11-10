@@ -1,0 +1,77 @@
+/* Telas de acesso (docs/design/admin-login). No desktop, a coluna fica centralizada. */
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 440px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 32px var(--gutter);
+  line-height: 1.5;
+}
+
+.back {
+  display: flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  min-height: var(--tap-min);
+  color: var(--color-text-muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 56px;
+  text-align: center;
+}
+
+.mark {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-family: var(--font-heading);
+  font-size: 22px;
+}
+
+.title {
+  margin: 8px 0 0;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: var(--fw-heading);
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.body {
+  margin: 40px 0 32px;
+}
+
+.note {
+  margin: auto 0 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-sand);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back:hover {
+    color: var(--color-text);
+  }
+}
