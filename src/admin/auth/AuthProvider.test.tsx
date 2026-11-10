@@ -23,12 +23,13 @@ let adminRequests = 0;
 let seenStatuses: AuthStatus[] = [];
 
 function Probe() {
-  const { status, notice, retryCheck, signOut } = useAuth();
+  const { status, notice, deniedAttempts, retryCheck, signOut } = useAuth();
   if (seenStatuses.at(-1) !== status) seenStatuses.push(status);
   return (
     <>
       <p data-testid="status">{status}</p>
       <p data-testid="notice">{notice ?? 'nenhum'}</p>
+      <p data-testid="denied">{deniedAttempts}</p>
       <button type="button" onClick={retryCheck}>
         repetir
       </button>
@@ -116,7 +117,9 @@ describe('AuthProvider', () => {
 
     await expectNotice('accessDenied');
     await expectStatus('signedOut');
-    expect(seenStatuses).toContain('denied');
+    // O estado "denied" pode nem chegar à tela: o React junta as atualizações quando
+    // a resposta é rápida (aconteceu no CI). O contador prova a negação sem depender disso.
+    expect(screen.getByTestId('denied')).toHaveTextContent(/^1$/);
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull();
   });
 
