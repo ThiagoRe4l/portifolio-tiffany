@@ -106,6 +106,48 @@ test('âncora pelo menu do celular leva até a seção e fecha o menu', async ({
   await expect(page.locator(`#${SECTION_IDS.contato} h2`)).toBeInViewport();
 });
 
+test.describe('casos de borda', () => {
+  test('abrir em /#contato leva à seção, com o header descontado', async ({ page }) => {
+    await page.goto(`/#${SECTION_IDS.contato}`);
+    const heading = page.locator(`#${SECTION_IDS.contato} h2`);
+
+    await expect(heading).toBeInViewport();
+    await expect
+      .poll(async () => {
+        const headerBox = await page.locator('header').boundingBox();
+        const headingBox = await heading.boundingBox();
+        return (headingBox?.y ?? -1) >= (headerBox?.height ?? 0);
+      })
+      .toBe(true);
+  });
+
+  // Abre pela âncora: o WebKit do Playwright não restaura a rolagem ao recarregar.
+  test('abrir já rolado: o header tem fundo sólido sem rolagem do usuário', async ({ page }) => {
+    await page.goto(`/#${SECTION_IDS.contato}`);
+
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(40);
+    await expect(page.locator('header')).toHaveAttribute('data-scrolled');
+  });
+
+  test('movimento reduzido ligado no meio da visita: o resto não anima', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() =>
+      Promise.all(document.getAnimations().map((animation) => animation.finished)),
+    );
+
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.evaluate(() =>
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }),
+    );
+
+    expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
+    await expect(page.locator(`#${SECTION_IDS.contato} [class*="reveal"]`).first()).toHaveCSS(
+      'opacity',
+      '1',
+    );
+  });
+});
+
 test('ao rolar até o fim, todo elemento marcado é revelado, uma vez', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 800 });
   await page.goto('/');

@@ -175,8 +175,43 @@
   - console limpo;
   - JS inicial < 150 KB (`npm run size`).
 
-### T11 — Lighthouse e fechamento `[ ] pendente`
-- **Faz:**
+### T11 — Lighthouse e fechamento `[x] concluída` (2026-11-08)
+- **Lighthouse (PageSpeed Insights, celular, `https://psitiffanybeatriz.pages.dev/`, commit `0ad3d70`, medido e informado pelo Thiago):** Performance 100, Acessibilidade 100, Boas práticas 100 e SEO 100. LCP e CLS não foram informados em número; o CLS < 0,1 está coberto pelo E2E.
+- **Ressalva:** medido com textos de exemplo e sem fotos. Medir de novo depois que as fotos reais entrarem (005).
+- **Resultado final:** Vitest 852/852; `check`, `format:check`, lint e typecheck sem erros; E2E 190 passando e 5 pulados de propósito; JS inicial 74,5 KB gzip.
+- **Casos de borda acrescentados ao E2E:** abrir em `/#contato`, abrir já rolado e movimento reduzido ligado no meio da visita.
+
+| CA | Tema | Provado em |
+|---|---|---|
+| CA-01 | Marcos, ordem e `h1` único | `SitePage.test.tsx` |
+| CA-02 | Âncoras abaixo do header | `site-page.spec.ts` |
+| CA-03 | Link "pular" | `SitePage.test.tsx`, `site-page.spec.ts` |
+| CA-04 | Header e menu | `Header.test.tsx`, `site-header.spec.ts` |
+| CA-05 | Início | `Hero.test.tsx` |
+| CA-06 | Sobre mim | `About.test.tsx` |
+| CA-07 | Meu trabalho | `Work.test.tsx`, `site-quality.spec.ts` |
+| CA-08 | Área de atuação | `Focus.test.tsx` |
+| CA-09 | Como funciona | `HowItWorks.test.tsx`, `site-quality.spec.ts` |
+| CA-10 | O espaço | `Space.test.tsx`, `site-space-contact.spec.ts` |
+| CA-11 | Contato | `Contact.test.tsx`, `site-space-contact.spec.ts` |
+| CA-12 | Rodapé | `Footer.test.tsx` |
+| CA-13 | Botão flutuante | `FloatingWhatsApp.test.tsx`, `site-page.spec.ts` |
+| CA-14 | Destinos dos botões | `contactLinks.test.ts`, `Contact.test.tsx` |
+| CA-15 | Fotos sem pulo de layout | `Photo.test.tsx`, `site-quality.spec.ts` |
+| CA-16 | Ícones | `Icon.test.tsx` |
+| CA-17 | Entrada e revelação | testes de `src/site/motion`, `site-page.spec.ts` |
+| CA-18 | Hover só com ponteiro | `site-quality.spec.ts` |
+| CA-19 | Movimento reduzido (obrigatório) | testes de `src/site/motion`, `site-quality.spec.ts`, `site-page.spec.ts` |
+| CA-20 | Sem JavaScript | `site-quality.spec.ts` |
+| CA-21 | Sem texto fixo (obrigatório) | `SitePage.test.tsx` |
+| CA-22 | Nome e CRP | `SitePage.test.tsx` |
+| CA-23 | axe, largura, JS, console | `site-quality.spec.ts`, `npm run size` |
+
+- **Pendências para as próximas specs:**
+  - **003/004:** tabela `admins` e política de escrita; restrição das seções no banco; `supabase-js` só no admin; formulários gerados por `walkSchema` + `fieldMeta`; rebuild anual do `{ano}` por deploy hook.
+  - **005:** fotos reais com `srcset`/`sizes` e nova medição no PageSpeed.
+  - **Conteúdo:** trocar os placeholders `[...]` e o número fictício do WhatsApp antes de divulgar o site.
+- **Plano original da tarefa:**
   - depois do seu push e do deploy, medição no PageSpeed Insights (mobile) do `*.pages.dev`, com Performance, Acessibilidade, Boas práticas, SEO, LCP e CLS registrados aqui;
   - ajustes, se alguma meta falhar;
   - quadro de CAs e pendências para 003–005.
