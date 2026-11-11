@@ -139,6 +139,22 @@ test.describe('fluxos', () => {
     expect(problems).toEqual([]);
   });
 
+  // Spec 003, T11: a volta do link pode cair na Site URL ou em outra rota do admin.
+  for (const start of ['/', '/admin', '/admin/login']) {
+    test(`link de recuperação que volta para ${start}: abre a tela de nova senha`, async ({
+      page,
+    }) => {
+      const mock = await mockSupabase(page);
+
+      await page.goto(`${start}${recoveryLinkHash()}`);
+
+      await expect(page.getByLabel('Nova senha', { exact: true })).toBeVisible();
+      await expect(page).toHaveURL(/\/admin\/nova-senha$/);
+      expect(page.url()).not.toContain('access_token');
+      expect(mock.calls).toContain('GET /auth/v1/user');
+    });
+  }
+
   test('fluxo completo só com o teclado', async ({ page, browserName }) => {
     await mockSupabase(page);
     await page.goto('/admin/login');

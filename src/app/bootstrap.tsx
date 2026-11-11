@@ -22,12 +22,22 @@ function mount(rootElement: HTMLElement, node: ReactNode): () => void {
 export async function bootstrap(
   pathname: string,
   rootElement: HTMLElement | null,
+  {
+    hash = window.location.hash,
+    leave = (url: string) => window.location.replace(url),
+  }: { hash?: string; leave?: (url: string) => void } = {},
 ): Promise<() => void> {
   if (!rootElement) {
     throw new Error('Elemento #root não encontrado no index.html');
   }
 
-  const entry = resolveEntry(pathname);
+  const entry = resolveEntry(pathname, hash);
+
+  if (entry.kind === 'recoveryRedirect') {
+    // `replace`: a página com o token não fica no histórico.
+    leave(entry.to);
+    return () => undefined;
+  }
 
   if (entry.kind === 'admin') {
     const { AdminApp } = await import('@/admin/AdminApp');

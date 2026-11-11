@@ -44,6 +44,30 @@ describe('consumeRecoveryHash', () => {
     expect(window.location.href).not.toContain('access_token');
   });
 
+  // Spec 003, T11: a volta do link pode cair em outra rota do admin.
+  it.each(['/admin', '/admin/login', '/admin/qualquer'])(
+    'link em %s: vai para a tela de nova senha, sem o token',
+    (path) => {
+      openAt(`${path}?x=1#access_token=aaa&refresh_token=rrr&type=recovery`);
+
+      consumeRecoveryHash();
+
+      expect(window.location.pathname).toBe(PATH);
+      expect(window.location.search).toBe('?x=1');
+      expect(window.location.hash).toBe('');
+      expect(getRecoveryLink()).toMatchObject({ kind: 'tokens' });
+    },
+  );
+
+  it('link expirado em outra rota: também vai para a tela de nova senha', () => {
+    openAt('/admin/login#error=access_denied&error_code=otp_expired');
+
+    consumeRecoveryHash();
+
+    expect(window.location.pathname).toBe(PATH);
+    expect(getRecoveryLink()).toEqual({ kind: 'invalid' });
+  });
+
   it('link expirado (#error_code): registra o erro e limpa a URL', () => {
     openAt(`${PATH}#error=access_denied&error_code=otp_expired&error_description=Link+expired`);
 

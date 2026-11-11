@@ -100,6 +100,34 @@ describe('bootstrap: site', () => {
     expect(loaded.modules).not.toContain('admin');
   });
 
+  // Spec 003, T11: o link de recuperação que volta para o site segue para o admin,
+  // sem o site renderizar nem baixar o código do admin.
+  it('"/" com o token do link de recuperação repassa para a tela de nova senha', async () => {
+    const hash = '#access_token=aaa&refresh_token=rrr&type=recovery';
+    const leave = vi.fn();
+    embed(content);
+
+    await act(async () => {
+      unmount = await bootstrap('/', container, { hash, leave });
+    });
+
+    expect(leave).toHaveBeenCalledExactlyOnceWith(`/admin/nova-senha${hash}`);
+    expect(container).toBeEmptyDOMElement();
+    expect(loaded.modules).not.toContain('admin');
+  });
+
+  it('"/" com hash comum segue normal', async () => {
+    const leave = vi.fn();
+    embed(content);
+
+    await act(async () => {
+      unmount = await bootstrap('/', container, { hash: '#contato', leave });
+    });
+
+    expect(leave).not.toHaveBeenCalled();
+    expect(screen.getByRole('main')).toHaveTextContent(content.inicio.title);
+  });
+
   it('sem conteúdo embutido, falha com mensagem clara', async () => {
     await expect(bootstrap('/', container)).rejects.toThrow(/#site-content/);
   });

@@ -34,4 +34,32 @@ describe('AdminApp', () => {
     expect(window.location.pathname).toBe('/admin/nova-senha');
     expect(getRecoveryLink()).toMatchObject({ kind: 'tokens', accessToken: 'aaa' });
   });
+
+  // Spec 003, T11: a volta do link pode cair em /admin, rota protegida.
+  it('link que chega em /admin: o roteador já nasce na tela de nova senha', async () => {
+    window.history.replaceState(
+      null,
+      '',
+      '/admin#access_token=aaa&refresh_token=rrr&type=recovery',
+    );
+    vi.resetModules();
+
+    const pathWhenRouterIsCreated = vi.fn();
+    vi.doMock('react-router', async (importOriginal) => {
+      const original = await importOriginal<typeof import('react-router')>();
+      return {
+        ...original,
+        createBrowserRouter: (...args: Parameters<typeof original.createBrowserRouter>) => {
+          pathWhenRouterIsCreated(window.location.pathname + window.location.hash);
+          return original.createBrowserRouter(...args);
+        },
+      };
+    });
+
+    await import('./AdminApp');
+    const { getRecoveryLink } = await import('./auth/recoveryHash');
+
+    expect(pathWhenRouterIsCreated).toHaveBeenCalledExactlyOnceWith('/admin/nova-senha');
+    expect(getRecoveryLink()).toMatchObject({ kind: 'tokens', accessToken: 'aaa' });
+  });
 });

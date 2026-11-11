@@ -65,7 +65,7 @@ Ao final da 003:
   - depois do login, o destino é sempre `/admin`, sem parâmetro de retorno, o que elimina redirecionamento aberto.
 - **Privacidade:** nenhum dado de paciente é coletado.
 - **Testes:** nenhum teste acessa o Supabase real: MSW nos unitários e interceptação de rede no E2E. O RLS é conferido por teste estático da migration e, depois de aplicada, pelo roteiro manual do CA-14.
-- **Desempenho:** o JS inicial do site não recebe código do admin nem o SDK (74,5 KB gzip antes desta spec, 74,6 KB depois: só a lista de arquivos do admin, que passou a incluir o CSS dele). Texto ajustado com o Thiago em 2026-11-09.
+- **Desempenho:** o JS inicial do site não recebe código do admin nem o SDK (74,5 KB gzip antes desta spec, 74,7 KB depois: a lista de arquivos do admin, que passou a incluir o CSS dele, e o reconhecimento do retorno do link de recuperação, da T11). Texto ajustado com o Thiago em 2026-11-09.
 
 ## Critérios de aceite
 
@@ -91,6 +91,7 @@ Ao final da 003:
 
 - **Sessão aberta em duas abas:** ao sair em uma, a outra volta ao login na próxima verificação ou ação.
 - **Link de recuperação aberto em outro aparelho** (pedido no computador, aberto no celular): precisa funcionar.
+- **Link de recuperação que volta para outro endereço** (a Site URL, quando o e-mail é enviado pelo painel do Supabase ou o endereço de volta não é aceito): chegando ao site ou a outra rota do admin, o link é levado à tela de nova senha. Acrescentado em 2026-11-10, depois do teste real (T11).
 - **Conta removida de `admins` com a sessão aberta:** perde o acesso à tela na próxima verificação; o banco já recusa a escrita de imediato.
 - **Supabase pausado por inatividade:** login mostra "serviço indisponível"; o site público continua no ar.
 - **Autopreenchimento do navegador:** o formulário reconhece os valores preenchidos.

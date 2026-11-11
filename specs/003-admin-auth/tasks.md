@@ -72,6 +72,15 @@
 
 ---
 
+### T11 — Link de recuperação em qualquer endereço `[x] concluída`
+- **Origem:** no teste real (2026-11-10), o link do e-mail abriu o login em vez da tela de nova senha. A causa provável é o envio pelo painel do Supabase, que volta para a Site URL. O Thiago aprovou a melhoria.
+- **Faz:** o token do link, chegando a qualquer rota do admin, leva a `/admin/nova-senha`; chegando ao site, a página repassa o link para lá, sem carregar o código do admin.
+- **Cobre:** o caso de borda novo da spec e o CA-07.
+- **Testes:** `resolveEntry.test.ts`, `bootstrap.test.tsx`, `recoveryHash.test.ts`, `AdminApp.test.tsx` e E2E (`/admin#token` e `/#token` abrem a tela de nova senha).
+- **Resultado (2026-11-10):** Vitest 1103/1103; E2E 301 aprovados e 5 pulados de propósito; JS inicial do site 74,7 KB gzip, porque o site agora reconhece o retorno do link (`src/lib/authRedirect.ts`), sem código do admin.
+
+---
+
 ## Quadro de critérios de aceite
 
 Estado em 2026-11-09: Vitest 1089/1089; `npm run check` e `format:check` sem erros; E2E 292 aprovados e 5 pulados de propósito (site); JS inicial do site 74,6 KB gzip; pacote do admin 91,6 KB gzip.

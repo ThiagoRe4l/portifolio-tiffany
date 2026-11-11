@@ -21,4 +21,29 @@ describe('resolveEntry', () => {
       expect(resolveEntry(pathname)).toEqual({ kind: 'site', redirectTo: '/' });
     },
   );
+
+  // Spec 003, T11: o link de recuperação pode voltar para a Site URL.
+  describe('retorno do link de recuperação', () => {
+    const TOKENS = '#access_token=aaa.bbb.ccc&refresh_token=rrr&type=recovery';
+    const EXPIRED = '#error=access_denied&error_code=otp_expired';
+
+    it.each([
+      ['/', TOKENS],
+      ['/qualquer-coisa', TOKENS],
+      ['/', EXPIRED],
+    ])('%s%s vai para a tela de nova senha, com o hash', (pathname, hash) => {
+      expect(resolveEntry(pathname, hash)).toEqual({
+        kind: 'recoveryRedirect',
+        to: `/admin/nova-senha${hash}`,
+      });
+    });
+
+    it('no admin, quem cuida do link é o próprio admin', () => {
+      expect(resolveEntry('/admin', TOKENS)).toEqual({ kind: 'admin' });
+    });
+
+    it.each(['#contato', '#type=recovery', ''])('hash comum (%j) não muda nada', (hash) => {
+      expect(resolveEntry('/', hash)).toEqual({ kind: 'site' });
+    });
+  });
 });
