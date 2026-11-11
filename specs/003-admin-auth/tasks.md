@@ -1,6 +1,6 @@
 # 003 — Admin: autenticação · tarefas
 
-> Status: **aprovado no Gate 2** (2026-11-08)
+> Status: **concluída** (2026-11-10) · Gate 2 aprovado em 2026-11-08
 > Legenda: `[ ] pendente` · `[~] testes escritos` · `[x] concluída`
 
 **Autorizações incluídas ao aprovar este Gate 2:** instalar `@supabase/supabase-js` 2.119.0 (T01), escrever a migration (T02, sem aplicar) e mudar o script `test:e2e` (T09). Aplicar a migration e configurar o Supabase ficam com o Thiago (T10).
@@ -63,12 +63,13 @@
 - **Cobre:** CA-17 e os fluxos de CA-04, CA-07, CA-09 e CA-11 no navegador.
 - **Testes (Pixel 7, iPhone 13, 1440px, rede interceptada):** login até `/admin` e "Sair"; sem sessão redireciona; recarregar mantém a sessão; link de recuperação limpa o hash e salva a senha; fluxo só com teclado; axe; rolagem de 320 a 1440px; toque ≥ 48px; console limpo; nenhuma requisição para fora do domínio falso.
 
-### T10 — Configuração real e fechamento `[~] aguardando a configuração real`
+### T10 — Configuração real e fechamento `[x] concluída`
 - **Faz:** o Thiago segue o roteiro do `plan.md`; atualizar o CLAUDE.md §5; quadro de CAs.
 - **Cobre:** CA-14.
 - **Verificação:** `npm run check`, `format:check` e E2E completos; login real e e-mail de recuperação conferidos no site publicado.
 - **Feito (2026-11-09):** CLAUDE.md §5, linha "Rotas", passa a "Definido"; quadro abaixo.
-- **Falta:** roteiro manual do Thiago (passos 1 a 8 do `plan.md`) e a conferência no site publicado.
+- **Conferido pelo Thiago (2026-11-10):** configuração do Supabase e do Cloudflare; login, "Sair" e `/admin` sem sessão indo ao login no site publicado; CA-14 no SQL Editor (administradora grava; conta fora de `admins`, anônimo, escrita em `admins` e exclusão recusados); recuperação de senha pelo e-mail até a tela de nova senha, depois da T11.
+- **Achado no teste real:** a linha em `admins` não tinha sido inserida (o login mostrou a mensagem de acesso negado, como previsto), e o primeiro link de recuperação abriu o login, o que levou à T11.
 
 ---
 
@@ -100,7 +101,7 @@ Estado em 2026-11-09: Vitest 1089/1089; `npm run check` e `format:check` sem err
 | CA-11 | ok | `AdminEditorPage.test.tsx` (servidor fora e sem rede); E2E |
 | CA-12 | ok | `AdminEditorPage.test.tsx` |
 | CA-13 | ok | `admins-migration.test.ts` (14 sabotagens pegas) |
-| CA-14 | pendente | roteiro manual do Thiago, depois de aplicar a migration |
+| CA-14 | ok | roteiro manual no SQL Editor e teste no site publicado (2026-11-10) |
 | CA-15 | ok | `bundle-budget.test.ts`; `npm run size` |
 | CA-16 | ok | `adminRoutes.unconfigured.test.tsx` |
 | CA-17 | ok, com ressalvas | `admin-auth.spec.ts` nos três aparelhos; ressalvas abaixo |

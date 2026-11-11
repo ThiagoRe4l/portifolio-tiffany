@@ -1,6 +1,6 @@
 # 003 — Admin: autenticação · plano técnico
 
-> Status: **aprovado no Gate 2** (2026-11-08)
+> Status: **concluído** (2026-11-10) · Gate 2 aprovado em 2026-11-08
 > Data: 2026-11-08 · Spec: `spec.md` (Gate 1 aprovado)
 
 ## Decisões do Gate 1

@@ -1,6 +1,6 @@
 # 003 — Admin: autenticação
 
-> Status: **aprovada no Gate 1** (2026-11-08), com as recomendações das três decisões abaixo.
+> Status: **concluída** (2026-11-10). Gate 1 aprovado em 2026-11-08, com as recomendações das três decisões abaixo.
 > Data: 2026-11-08 · Depende de: 000 (concluída, exceto CA-13 e CA-19), 001 e 002 (concluídas)
 > Referência visual: `docs/design/admin-login.png` e `.html`. Em conflito: CLAUDE.md/spec > design.
 
