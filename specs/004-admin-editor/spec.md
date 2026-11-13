@@ -1,6 +1,6 @@
 # 004 — Admin: editor do conteúdo
 
-> Status: **aprovada no Gate 1** (2026-11-10), com as recomendações das seis perguntas.
+> Status: **concluída** (2026-11-13). Gate 1 aprovado em 2026-11-10, com as recomendações das seis perguntas.
 > Data: 2026-11-10 · Depende de: 001, 002 e 003 (concluídas)
 > Referência visual: `docs/design/admin-editor-sobre.png` e `admin-editor-contato.png` (e os `.html`). Em conflito: CLAUDE.md/spec > conteúdo (`src/content`) > design.
 

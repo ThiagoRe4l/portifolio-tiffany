@@ -1,6 +1,6 @@
 # 004 — Admin: editor do conteúdo · tarefas
 
-> Status: **aprovado no Gate 2** (2026-11-10)
+> Status: **concluída** (2026-11-13) · Gate 2 aprovado em 2026-11-10
 > Legenda: `[ ] pendente` · `[~] testes escritos` · `[x] concluída`
 
 **Autorizações incluídas ao aprovar este Gate 2:** escrever a migration (T01, sem aplicar). Nenhuma dependência nova. Aplicar a migration e configurar o Supabase e o Cloudflare ficam com o Thiago (T09).
@@ -102,7 +102,40 @@
   - toque ≥ 48px;
   - console limpo.
 
-### T09 — Configuração real e fechamento `[ ] pendente`
+### T09 — Configuração real e fechamento `[x] concluída`
 - **Faz:** o Thiago segue o roteiro do `plan.md`; quadro de CAs.
 - **Cobre:** CA-09, CA-12 e CA-13 no ambiente real.
 - **Verificação:** `npm run check`, `format:check` e E2E completos; editar e publicar no site real.
+- **Conferido pelo Thiago (2026-11-13):** deploy hook, Vault, migration, `REQUIRE_REMOTE_CONTENT=true` e alerta no Cloudflare; gravação com autor e data preenchidos pelo banco; `private.request_deploy()` com resposta 200; editar no admin publicado dispara um deploy novo e o texto chega ao site; agendamento anual no `cron.job`.
+- **Achado no teste real:** o segredo do Vault foi criado com o endereço e o nome trocados (e com o comando `curl` inteiro). A função não achava `cloudflare_deploy_hook`, só registrava o aviso e não chamava o Cloudflare, por isso as gravações não publicavam. Corrigido no banco; o roteiro do `plan.md` ficou mais explícito. Recomendado ao Thiago trocar o deploy hook, porque o endereço ficou um tempo no campo de nome, sem criptografia.
+
+---
+
+## Quadro de critérios de aceite
+
+Estado em 2026-11-13: Vitest 1318/1318; `npm run check` e `format:check` sem erros; E2E 412 aprovados e 5 pulados de propósito (site); JS inicial do site 74,7 KB gzip (sem mudança); pacote do admin 127,8 KB gzip.
+
+| CA | Situação | Prova |
+|---|---|---|
+| CA-01 | ok | `AdminEditorPage.editor.test.tsx` (status); E2E ("agora" e recarregar) |
+| CA-02 | ok | `AdminEditorPage.editor.test.tsx` (endereço, seção inválida); E2E |
+| CA-03 | ok (obrigatório) | `SectionForm.coverage.test.tsx`, comparado com o `walkSchema` independente |
+| CA-04 | ok | `fields.test.tsx` (contagem e anúncio) |
+| CA-05 | ok | `fields.test.tsx`; E2E (lista só com o teclado) |
+| CA-06 | ok | `fields.test.tsx`, `normalize.test.ts`; telefone gravado só com dígitos (editor e E2E) |
+| CA-07 | ok | `SectionForm.test.tsx` (aviso de texto provisório) |
+| CA-08 | ok | `AdminEditorPage.editor.test.tsx` (resumo e foco); E2E |
+| CA-09 | ok | `contentApi.test.ts`, `publish-migration.test.ts` e teste real (autor, data e deploy) |
+| CA-10 | ok | `AdminEditorPage.editor.test.tsx` (rede, serviço fora, conflito) |
+| CA-11 | ok | `contentApi.test.ts`; `AdminEditorPage.editor.test.tsx` |
+| CA-12 | ok | `load.test.ts` (001) e `REQUIRE_REMOTE_CONTENT=true` no Cloudflare |
+| CA-13 | ok | `publish-migration.test.ts` e `cron.job` no banco real |
+| CA-14 | ok | `AdminEditorPage.unsaved.test.tsx`; E2E (janela real, Esc e fechar a aba) |
+| CA-15 | ok | `contentApi.test.ts`; `AdminEditorPage.editor.test.tsx` (carregamento) |
+| CA-16 | ok | `admin-editor.spec.ts` nos três aparelhos |
+
+### Desvios e decisões registrados
+- `walkSchema` dos testes mantido independente da árvore do admin (T02).
+- Dica do telefone no admin troca a do schema: "Com DDD. Ex.: (11) 99999-8888" (T06).
+- E2E local com 3 processos: o padrão derrubava o WebKit com a carga (T08). No CI, o padrão segue.
+- Teste rápido do admin (`smoke.spec.ts`) passou a simular o Supabase: ele falhava às vezes (T06).

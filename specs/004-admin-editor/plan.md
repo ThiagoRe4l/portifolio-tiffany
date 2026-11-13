@@ -1,6 +1,6 @@
 # 004 — Admin: editor do conteúdo · plano técnico
 
-> Status: **aprovado no Gate 2** (2026-11-10)
+> Status: **concluído** (2026-11-13) · Gate 2 aprovado em 2026-11-10
 > Data: 2026-11-10 · Spec: `spec.md` (Gate 1 aprovado em 2026-11-10, com as seis recomendações)
 
 ## Decisões do Gate 1
@@ -202,6 +202,7 @@ select cron.schedule('deploy-ano-novo', '5 3 1 1 *', 'select private.request_dep
 1. **Cloudflare → o projeto → Settings → Builds → Deploy hooks → Add deploy hook:** nome "admin", branch `main`. Copiar o endereço gerado (ele é secreto).
 2. **Supabase → SQL Editor:**
    `select vault.create_secret('<endereço do deploy hook>', 'cloudflare_deploy_hook');`
+   Primeiro o endereço, depois o nome, e **só o endereço** (`https://api.cloudflare.com/...`), sem o `curl -X POST` que o Cloudflare mostra. Na aplicação real os dois foram trocados, e o deploy não disparava sem nenhum erro aparente (ver T09). Conferência: `select name, left(decrypted_secret, 30) from vault.decrypted_secrets;` e o teste direto `select private.request_deploy();`.
 3. **Supabase → SQL Editor:** colar e rodar `supabase/migrations/20261110120000_publish.sql`.
 4. **Cloudflare → Variables:** `REQUIRE_REMOTE_CONTENT` = `true` em Production.
 5. **Cloudflare → Notifications:** alerta por e-mail para deploy com falha.
