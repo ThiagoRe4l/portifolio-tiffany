@@ -1,0 +1,73 @@
+/* Cabeçalho do design (docs/design/admin-editor-*), com toque de 48px (CLAUDE.md §7). */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 12px 12px 20px;
+  border-bottom: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+
+.titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: var(--fw-heading);
+}
+
+.status {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.status[data-unsaved] {
+  color: var(--color-accent-on-sand);
+}
+
+.actions {
+  display: flex;
+  flex: none;
+  gap: 4px;
+}
+
+.viewSite,
+.signOut {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-min);
+  border-radius: 10px;
+}
+
+.viewSite {
+  gap: 6px;
+  padding: 0 12px;
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+}
+
+.signOut {
+  width: var(--tap-min);
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .viewSite:hover,
+  .signOut:hover {
+    background: var(--color-primary-soft);
+  }
+}

@@ -7,6 +7,7 @@ import {
 } from './intersectionObserver';
 import { installMatchMediaMock, resetMatchMediaMock } from './matchMedia';
 import { installResizeObserverMock, resetResizeObserverMock } from './resizeObserver';
+import { installDialogMock } from './dialog';
 import { server, startServer, takeUnhandledRequests } from './msw';
 
 // Testes marcados com `// @vitest-environment node` (ex.: lint) não têm DOM.
@@ -18,6 +19,7 @@ beforeAll(() => {
 
 beforeEach(() => {
   if (!hasDom) return;
+  installDialogMock();
   installIntersectionObserverMock();
   installMatchMediaMock();
   installResizeObserverMock();

@@ -13,7 +13,7 @@ import { isAdmin, isAuthConfigured, onSessionChange, signOut as endSession } fro
 export type AuthStatus =
   'loading' | 'signedOut' | 'checking' | 'admin' | 'denied' | 'checkFailed' | 'unconfigured';
 
-export type AuthNotice = 'sessionExpired' | 'accessDenied';
+export type AuthNotice = 'sessionExpired' | 'sessionExpiredUnsaved' | 'accessDenied';
 
 type AuthContextValue = {
   status: AuthStatus;
@@ -22,6 +22,10 @@ type AuthContextValue = {
   deniedAttempts: number;
   retryCheck: () => void;
   signOut: () => Promise<void>;
+  /** O banco recusou a sessão (ex.: ao salvar): encerra com o aviso de sessão expirada. */
+  expireSession: () => Promise<void>;
+  /** O editor informa se há alterações não salvas, para o aviso certo no login (004). */
+  setUnsavedChanges: (unsaved: boolean) => void;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -36,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const currentUser = useRef<string | null>(null);
   const expectingSignOut = useRef(false);
+  const unsavedChanges = useRef(false);
   // Cada verificação recebe um número; só a mais recente pode mudar o estado.
   const latestCheck = useRef(0);
 
@@ -73,7 +78,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (userId === null) {
         latestCheck.current += 1;
-        if (previous !== null && !expected) setNotice('sessionExpired');
+        if (previous !== null && !expected) {
+          setNotice(unsavedChanges.current ? 'sessionExpiredUnsaved' : 'sessionExpired');
+        }
+        unsavedChanges.current = false;
         setStatus('signedOut');
       } else if (userId !== previous) {
         // Renovação do token repete a mesma conta: não refaz a verificação.
@@ -100,9 +108,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setStatus('signedOut');
   }, []);
 
+  // Sem marcar a saída como esperada: o aviso de sessão expirada aparece no login.
+  const expireSession = useCallback(async () => {
+    await endSession();
+  }, []);
+
+  const setUnsavedChanges = useCallback((unsaved: boolean) => {
+    unsavedChanges.current = unsaved;
+  }, []);
+
   const value = useMemo(
-    () => ({ status, notice, deniedAttempts, retryCheck, signOut }),
-    [status, notice, deniedAttempts, retryCheck, signOut],
+    () => ({
+      status,
+      notice,
+      deniedAttempts,
+      retryCheck,
+      signOut,
+      expireSession,
+      setUnsavedChanges,
+    }),
+    [status, notice, deniedAttempts, retryCheck, signOut, expireSession, setUnsavedChanges],
   );
 
   return <AuthContext value={value}>{children}</AuthContext>;

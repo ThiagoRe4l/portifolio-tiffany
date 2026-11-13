@@ -35,7 +35,7 @@ pg_cron (1º de janeiro) ───────→ private.request_deploy()
 ## Decisões técnicas
 
 ### D1 — Árvore do schema (`src/admin/editor/schemaTree.ts`)
-Função pura que transforma o schema Zod de uma seção numa árvore de nós: `{ key, path, meta, kind, children?, item? }`. É a mesma lógica de `tests/support/walkSchema.ts`, levada para o código de produção; o helper de teste passa a reaproveitá-la. Dentro de uma foto, só o texto alternativo vira campo (decisão 3).
+Função pura que transforma o schema Zod de uma seção numa árvore de nós: `{ key, path, meta, kind, children?, item? }`. Faz o mesmo percurso de `tests/support/walkSchema.ts`, mas no código de produção. O helper de teste continua independente, de propósito: os testes comparam as duas implementações, o que prova mais do que comparar a árvore com ela mesma (ajuste da T02). Dentro de uma foto, só o texto alternativo vira campo (decisão 3).
 
 O formulário recebe o schema por parâmetro, e não por nome de seção. Assim, o teste de cobertura monta também um schema de teste com um campo novo e confirma que ele aparece sem mudar o admin (CA-03).
 
@@ -175,7 +175,6 @@ select cron.schedule('deploy-ano-novo', '5 3 1 1 *', 'select private.request_dep
 | `src/admin/AdminEditorPage.tsx` | passa a montar o editor (o cabeçalho da 003 vira `EditorHeader`) |
 | `src/admin/auth/AuthProvider.tsx`, `authMessages.ts` | aviso de sessão expirada com alterações perdidas |
 | `src/admin/components/TextField.tsx` | aceita contagem de caracteres e `onPaste` |
-| `tests/support/walkSchema.ts` | passa a usar `schemaTree` |
 | `tests/setup/*` | substituto de `showModal` para o jsdom |
 | `tests/e2e/support/supabase.ts` | conteúdo em memória |
 | `supabase/migrations/20261110120000_publish.sql` | novo (D8) |
@@ -187,7 +186,7 @@ select cron.schedule('deploy-ano-novo', '5 3 1 1 *', 'select private.request_dep
 - **Privilégios dos gatilhos:** se o Supabase exigir permissões que o teste estático não enxerga, o roteiro manual pega (gravar pelo admin e ver o deploy no Cloudflare). A correção seria ajustar `grant`/`owner` na própria migration.
 - **Deploy que falha depois de salvar:** o admin não sabe. Mitigação: notificações de deploy por e-mail no Cloudflare (roteiro).
 - **Várias gravações seguidas:** um deploy por gravação. O plano gratuito do Cloudflare permite 500 builds por mês e roda um de cada vez; para o uso dela, sobra.
-- **Pacote do admin maior** (Zod, schemas e conteúdo padrão): medido na T05, sem efeito no site.
+- **Pacote do admin maior** (Zod, schemas e conteúdo padrão): cerca de 35 KB gzip a mais, medido na T05, sem efeito no site.
 - **`<dialog>` em navegadores antigos:** suportado no Safari desde a versão 15.4 (2022); aceitável para o celular dela.
 
 ## Alternativas descartadas

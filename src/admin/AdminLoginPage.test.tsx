@@ -417,7 +417,8 @@ describe('avisos vindos da sessão', () => {
       </AuthProvider>,
     );
     await waitFor(() => expect(document.querySelector('main')).not.toBeNull());
-    await waitFor(() => expect(screen.queryByRole('status')).toBeNull());
+    // O editor (004) tem regiões de aviso sempre presentes: espera o conteúdo carregar.
+    await screen.findByRole('combobox', { name: /Seção do site/ });
 
     await act(() => getSupabase().auth.signOut({ scope: 'local' }));
 

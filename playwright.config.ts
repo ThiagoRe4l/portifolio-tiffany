@@ -13,6 +13,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: isCI,
   retries: isCI ? 2 : 0,
+  // Local: com o editor (spec 004), o padrão (metade dos núcleos, os três aparelhos juntos)
+  // sobrecarregou a máquina e derrubou o WebKit ("Page crashed"). No CI, o padrão segue.
+  workers: isCI ? undefined : 3,
   reporter: isCI ? [['list'], ['html', { open: 'never' }]] : [['list']],
   use: {
     baseURL: `http://localhost:${PORT}`,

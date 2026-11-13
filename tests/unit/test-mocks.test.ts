@@ -17,6 +17,22 @@ describe('ambiente de testes', () => {
   });
 });
 
+describe('substituto do <dialog> (spec 004)', () => {
+  it('showModal abre e close fecha, avisando com o evento close', () => {
+    const dialog = document.createElement('dialog');
+    document.body.append(dialog);
+    const onClose = vi.fn();
+    dialog.addEventListener('close', onClose);
+
+    dialog.showModal();
+    expect(dialog.open).toBe(true);
+
+    dialog.close();
+    expect(dialog.open).toBe(false);
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+});
+
 describe('mock de IntersectionObserver', () => {
   it('dispara o callback com a razão de interseção informada', () => {
     const element = document.createElement('div');

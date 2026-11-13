@@ -72,16 +72,25 @@ describe('AuthLayout', () => {
 });
 
 describe('AdminIcon', () => {
-  it.each<AdminIconName>(['arrowLeft', 'eye', 'eyeOff', 'lock', 'logout'])(
-    '%s: decorativo, traço 1.8',
-    (name) => {
-      const { container } = render(<AdminIcon name={name} />);
-      const svg = container.querySelector('svg');
+  it.each<AdminIconName>([
+    'arrowLeft',
+    'arrowUp',
+    'arrowDown',
+    'check',
+    'close',
+    'eye',
+    'eyeOff',
+    'lock',
+    'logout',
+    'plus',
+    'trash',
+  ])('%s: decorativo, traço 1.8', (name) => {
+    const { container } = render(<AdminIcon name={name} />);
+    const svg = container.querySelector('svg');
 
-      expect(svg).toHaveAttribute('data-icon', name);
-      expect(svg).toHaveAttribute('aria-hidden', 'true');
-      expect(svg).toHaveAttribute('stroke-width', '1.8');
-      expect(svg?.childElementCount).toBeGreaterThan(0);
-    },
-  );
+    expect(svg).toHaveAttribute('data-icon', name);
+    expect(svg).toHaveAttribute('aria-hidden', 'true');
+    expect(svg).toHaveAttribute('stroke-width', '1.8');
+    expect(svg?.childElementCount).toBeGreaterThan(0);
+  });
 });

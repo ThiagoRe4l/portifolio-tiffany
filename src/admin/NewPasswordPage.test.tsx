@@ -85,6 +85,8 @@ beforeEach(() => {
   respondSession(updated);
   server.use(
     http.get(`${REST_URL}/admins`, () => HttpResponse.json([{ user_id: USER_ID }])),
+    // Depois de salvar, o editor (004) abre e lê o conteúdo.
+    http.get(`${REST_URL}/site_content`, () => HttpResponse.json([])),
     http.post(`${AUTH_URL}/logout`, () => new HttpResponse(null, { status: 204 })),
   );
 });

@@ -38,6 +38,8 @@ describe('AUTH_NOTICES', () => {
       recoverySent:
         'Se este e-mail estiver cadastrado, você receberá um link para criar uma nova senha.',
       sessionExpired: 'Sua sessão expirou. Entre novamente.',
+      sessionExpiredUnsaved:
+        'Sua sessão expirou e as alterações não salvas foram perdidas. Entre novamente.',
       accessDenied: 'Esta conta não tem acesso à área administrativa.',
       checkFailed:
         'Não foi possível confirmar seu acesso. Verifique sua conexão e tente novamente.',

@@ -1,5 +1,6 @@
-import { expect, test, type Locator, type Page } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { checkA11y } from './support/a11y';
+import { tabTo, watchConsole } from './support/browser';
 import {
   E2E_SUPABASE_ORIGIN,
   mockSupabase,
@@ -9,34 +10,6 @@ import {
 
 // Spec 003, T09 (CA-17 e os fluxos de CA-04, CA-07, CA-09 e CA-11 no navegador).
 // Toda chamada ao Supabase é respondida por tests/e2e/support/supabase.ts.
-
-/**
- * Aviso intermitente do WebKit (cerca de 2 em 5 repetições dos fluxos), mesmo com as
- * fontes em uso na tela. No site o mesmo preload nunca o dispara. Pendência da spec 003.
- */
-const WEBKIT_PRELOAD_NOTICE =
-  /^The resource \S+\/fonts\/\S+\.woff2 was preloaded using link preload but not used within a few seconds/;
-
-function watchConsole(page: Page, browserName: string): string[] {
-  const problems: string[] = [];
-  page.on('pageerror', (error) => problems.push(error.message));
-  page.on('console', (message) => {
-    if (!['error', 'warning'].includes(message.type())) return;
-    if (browserName === 'webkit' && WEBKIT_PRELOAD_NOTICE.test(message.text())) return;
-    problems.push(message.text());
-  });
-  return problems;
-}
-
-/** No Safari, Tab não passa por links; Alt+Tab passa por tudo. */
-async function tabTo(page: Page, target: Locator, browserName: string) {
-  const key = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
-  for (let presses = 0; presses < 20; presses += 1) {
-    await page.keyboard.press(key);
-    if (await target.evaluate((element) => element === document.activeElement)) return;
-  }
-  throw new Error('o foco não chegou ao elemento pelo teclado');
-}
 
 const loginHeading = (page: Page) =>
   page.getByRole('heading', { level: 1, name: 'Área administrativa' });

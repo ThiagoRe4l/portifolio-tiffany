@@ -53,3 +53,46 @@
   font-size: 14px;
   line-height: 1.4;
 }
+
+/* Spec 004: caixa de várias linhas, dica, aviso e contagem de caracteres. */
+.textarea {
+  composes: input;
+  min-height: 120px;
+  padding: 14px 16px;
+  line-height: 1.5;
+  resize: vertical;
+  field-sizing: content; /* cresce com o texto onde o navegador suporta */
+}
+
+.hint,
+.warning {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.warning {
+  color: var(--color-accent-on-sand);
+}
+
+.counterRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.counter {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.counter[data-state='near'],
+.counter[data-state='over'] {
+  color: var(--color-accent-on-sand);
+}
+
+.counter[data-state='over'] {
+  font-weight: var(--fw-semibold);
+}

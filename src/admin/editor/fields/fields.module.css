@@ -1,0 +1,196 @@
+/* Campos do editor (docs/design/admin-editor-*), com toque de 48px (CLAUDE.md §7). */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  margin: 0;
+  padding: 20px 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background: var(--color-surface);
+}
+
+.legend {
+  padding: 0 8px;
+  color: var(--color-primary);
+  font-weight: var(--fw-semibold);
+}
+
+.hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.error {
+  margin: 0;
+  color: var(--color-accent-on-sand);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Interruptor */
+.toggleField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: var(--tap-min);
+  cursor: pointer;
+}
+
+.checkbox {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+
+/* Ícone */
+.iconRow {
+  display: flex;
+  flex: 1;
+  min-width: 0; /* senão o nome mais longo da lista alarga a página no celular */
+  align-items: center;
+  gap: 12px;
+}
+
+.iconPreview {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.select {
+  flex: 1;
+  min-width: 0;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid var(--color-input-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 16px;
+}
+
+/* Foto */
+.photo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.thumbnail {
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 14px;
+  background: var(--color-placeholder);
+  object-fit: cover;
+}
+
+/* Lista */
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-bg);
+}
+
+.itemHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.itemTitle {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: var(--fw-semibold);
+  overflow-wrap: anywhere;
+}
+
+.itemActions {
+  display: flex;
+  gap: 4px;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.iconButton:disabled,
+.iconButton[aria-disabled='true'],
+.addButton[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.itemBody {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  border: 1.5px dashed var(--color-input-border);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .iconButton:not(:disabled):not([aria-disabled='true']):hover,
+  .addButton:not([aria-disabled='true']):hover {
+    background: var(--color-primary-soft);
+  }
+}

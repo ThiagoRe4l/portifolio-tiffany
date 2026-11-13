@@ -9,7 +9,7 @@
 
 ---
 
-### T01 — Migration de publicação `[ ] pendente`
+### T01 — Migration de publicação `[x] concluída`
 - **Faz:** `supabase/migrations/20261110120000_publish.sql` (D8), sem aplicar.
 - **Cobre:** CA-09 (parte do banco), CA-12 e CA-13.
 - **Testes (`tests/unit/publish-migration.test.ts`):**
@@ -21,8 +21,8 @@
   - nenhum endereço de deploy, `service_role` ou e-mail no arquivo;
   - as migrations da 001 e da 003 continuam iguais.
 
-### T02 — Árvore do schema, rascunho e normalização `[ ] pendente`
-- **Faz:** `schemaTree.ts`, `draft.ts`, `normalize.ts` e `validation.ts` (D1–D3); `walkSchema` de teste passa a usar a árvore.
+### T02 — Árvore do schema, rascunho e normalização `[x] concluída`
+- **Faz:** `schemaTree.ts`, `draft.ts`, `normalize.ts` e `validation.ts` (D1–D3). O `walkSchema` de teste ficou independente, para servir de comparação.
 - **Cobre:** base de CA-03, CA-05, CA-06, CA-07 e CA-08.
 - **Testes:**
   - árvore de cada seção;
@@ -35,7 +35,7 @@
   - erros por caminho;
   - textos provisórios.
 
-### T03 — Leitura e gravação `[ ] pendente`
+### T03 — Leitura e gravação `[x] concluída`
 - **Faz:** `contentApi.ts` e `editorMessages.ts` (D4).
 - **Cobre:** CA-09 (cliente), CA-11 e CA-15 (dados).
 - **Testes (MSW):**
@@ -47,7 +47,7 @@
   - conflito nos dois caminhos;
   - cada erro classificado, sem texto do servidor.
 
-### T04 — Campos `[ ] pendente`
+### T04 — Campos `[x] concluída`
 - **Faz:** os campos de D5, `CharCounter`, `ListField`, foto e ícone.
 - **Cobre:** CA-04, CA-05, CA-06 e parte do CA-16.
 - **Testes:**
@@ -58,7 +58,7 @@
   - colar com quebras de linha;
   - `data-field-path` em todos os controles.
 
-### T05 — Formulário da seção e cobertura `[ ] pendente`
+### T05 — Formulário da seção e cobertura `[x] concluída`
 - **Faz:** `SectionForm` e `FieldRenderer`.
 - **Cobre:** CA-03 (teste obrigatório) e CA-07.
 - **Testes:**
@@ -66,8 +66,9 @@
   - um schema de teste com um campo novo aparece sem mudar o admin;
   - aviso de texto provisório;
   - peso do pacote do admin medido; JS inicial do site igual.
+- **Medição (2026-11-10):** o formulário, com o Zod, os schemas e o conteúdo padrão, acrescenta cerca de 35 KB gzip ao admin (build à parte: 112,3 → 147,5 KB, incluindo o React). Só quem abre `/admin` baixa. JS inicial do site: 74,7 KB, sem mudança.
 
-### T06 — Tela do editor e "Salvar e publicar" `[ ] pendente`
+### T06 — Tela do editor e "Salvar e publicar" `[x] concluída`
 - **Faz:** `AdminEditorPage`, `EditorHeader`, `SectionPicker`, `ActionBar`, `Toast` e `useEditorContent` (D6).
 - **Cobre:** CA-01, CA-02, CA-08, CA-10, CA-11 e CA-15.
 - **Testes (MSW):**
@@ -79,7 +80,7 @@
   - conflito;
   - "Descartar".
 
-### T07 — Alterações não salvas `[ ] pendente`
+### T07 — Alterações não salvas `[x] concluída`
 - **Faz:** `ConfirmDialog`, interceptação de troca de seção, "Descartar", "Ver site" e "Sair", `beforeunload`, e o aviso de sessão expirada com alterações perdidas (D6, D7).
 - **Cobre:** CA-14 e o RF-16 (sessão expirada).
 - **Testes:**
@@ -88,7 +89,7 @@
   - `beforeunload` só com alteração;
   - aviso no login quando a sessão acaba com alterações.
 
-### T08 — E2E `[ ] pendente`
+### T08 — E2E `[x] concluída`
 - **Faz:** conteúdo em memória no Supabase falso; `tests/e2e/admin-editor.spec.ts`.
 - **Cobre:** CA-16 e os fluxos de CA-01, CA-02, CA-05, CA-08 e CA-14 no navegador.
 - **Testes (Pixel 7, iPhone 13, 1440px):**

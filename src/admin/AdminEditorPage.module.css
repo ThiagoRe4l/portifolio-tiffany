@@ -1,60 +1,65 @@
-/* Cabeçalho do design (docs/design/admin-editor-*), com toque de 48px (CLAUDE.md §7). */
-.header {
+/* Editor (docs/design/admin-editor-*): mobile primeiro; no desktop, coluna centralizada. */
+.main {
+  min-height: 50vh;
+  padding-bottom: 120px; /* espaço para a barra fixa não cobrir o último campo */
+}
+
+.notice {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+  padding: 48px var(--gutter);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.notice p {
+  margin: 0;
+}
+
+.formArea {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 20px;
+}
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding: 12px 12px 12px 20px;
-  border-bottom: 1px solid var(--color-line);
+  padding: 12px 16px;
+  border: 1px solid var(--color-accent-on-sand);
+  border-radius: 14px;
   background: var(--color-surface);
+  color: var(--color-accent-on-sand);
+  font-size: 15px;
 }
 
-.title {
+.summary p {
   margin: 0;
-  font-family: var(--font-heading);
-  font-size: 20px;
-  font-weight: var(--fw-heading);
-  line-height: 1.25;
 }
 
-.actions {
-  display: flex;
-  gap: 4px;
-}
-
-.viewSite,
-.signOut {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.summaryLink {
   min-height: var(--tap-min);
-  border-radius: 10px;
-}
-
-.viewSite {
-  gap: 6px;
   padding: 0 12px;
-  color: var(--color-primary);
-  font-size: 14px;
-  font-weight: var(--fw-medium);
-  text-decoration: none;
-}
-
-.signOut {
-  width: var(--tap-min);
   border: 0;
   background: transparent;
-  color: var(--color-text-muted);
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: var(--fw-semibold);
+  text-decoration: underline;
   cursor: pointer;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .viewSite:hover,
-  .signOut:hover {
-    background: var(--color-primary-soft);
+@media (min-width: 768px) {
+  .formArea {
+    padding: 40px 24px;
   }
-}
-
-.main {
-  min-height: 50vh;
 }
