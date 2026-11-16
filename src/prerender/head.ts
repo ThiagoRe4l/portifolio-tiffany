@@ -15,7 +15,13 @@ const metaProperty = (property: string, content: string) =>
 export function renderSiteHead(content: SiteContent, siteUrl?: string): string {
   const { seoTitle, seoDescription, shareImage } = content.geral;
   const home = siteUrl ? `${normalizeSiteUrl(siteUrl)}/` : undefined;
-  const hasImage = shareImage.src !== '';
+  // As redes exigem endereço completo; a foto copiada para o site (005) é relativa.
+  const imageUrl = shareImage.src.startsWith('/')
+    ? siteUrl
+      ? `${normalizeSiteUrl(siteUrl)}${shareImage.src}`
+      : ''
+    : shareImage.src;
+  const hasImage = imageUrl !== '';
 
   const tags = [
     `<title>${escapeHtml(seoTitle)}</title>`,
@@ -28,7 +34,7 @@ export function renderSiteHead(content: SiteContent, siteUrl?: string): string {
   if (home) tags.push(metaProperty('og:url', home));
   if (hasImage) {
     tags.push(
-      metaProperty('og:image', shareImage.src),
+      metaProperty('og:image', imageUrl),
       metaProperty('og:image:width', String(shareImage.width)),
       metaProperty('og:image:height', String(shareImage.height)),
       metaProperty('og:image:alt', shareImage.alt),

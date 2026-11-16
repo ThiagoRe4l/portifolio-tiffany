@@ -84,6 +84,7 @@ describe('AdminIcon', () => {
     'logout',
     'plus',
     'trash',
+    'upload',
   ])('%s: decorativo, traço 1.8', (name) => {
     const { container } = render(<AdminIcon name={name} />);
     const svg = container.querySelector('svg');

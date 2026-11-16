@@ -16,7 +16,15 @@ const INPUT_BY_KIND: Partial<Record<FieldKind, InputHTMLAttributes<HTMLInputElem
 /** A dica do schema mostra o formato gravado; aqui ela digita do jeito dela (normalize.ts). */
 const PHONE_HINT = 'Com DDD. Ex.: (11) 99999-8888';
 
-export function TextInputField({ node, path, value, onChange, error, provisional }: FieldProps) {
+export function TextInputField({
+  node,
+  path,
+  value,
+  onChange,
+  error,
+  provisional,
+  warning,
+}: FieldProps & { warning?: string | undefined }) {
   const text = asText(value);
 
   // O navegador apagaria as quebras coladas, juntando as palavras: viram espaço.
@@ -35,7 +43,10 @@ export function TextInputField({ node, path, value, onChange, error, provisional
       {...INPUT_BY_KIND[node.kind]}
       label={node.meta.label}
       hint={node.kind === 'phone' ? PHONE_HINT : node.meta.hint}
-      warning={provisional ? PROVISIONAL_WARNING : undefined}
+      warning={
+        [provisional ? PROVISIONAL_WARNING : '', warning ?? ''].filter(Boolean).join(' ') ||
+        undefined
+      }
       error={error}
       max={node.kind === 'text' ? node.meta.max : undefined}
       value={text}

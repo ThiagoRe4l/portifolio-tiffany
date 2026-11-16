@@ -14,6 +14,11 @@ export type RenderContext = {
   errors: ReadonlyMap<string, string>;
   provisional: ReadonlySet<string>;
   onChange: (path: Path, value: unknown) => void;
+  /** Envio de fotos (005): o editor bloqueia publicar durante o envio e trata a sessão vencida. */
+  photos?: {
+    onBusyChange: (key: string, busy: boolean) => void;
+    onSessionExpired: () => void;
+  };
 };
 
 type FieldRendererProps = RenderContext & { node: FieldNode; path: Path; value: unknown };
@@ -84,6 +89,8 @@ export function FieldRenderer(props: FieldRendererProps) {
           value={value as Photo}
           altError={errors.get(`${key}.alt`)}
           altProvisional={provisional.has(`${key}.alt`)}
+          onBusyChange={(busy) => props.photos?.onBusyChange(key, busy)}
+          onSessionExpired={props.photos?.onSessionExpired}
         />
       );
     case 'longText':

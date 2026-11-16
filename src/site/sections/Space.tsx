@@ -1,6 +1,7 @@
 import { useContent } from '@/content/ContentProvider';
 import { headingIdFor, SECTION_IDS } from '../anchors';
 import { Photo } from '../components/Photo';
+import { PHOTO_SIZES } from '../photoSizes';
 import { SectionHeading } from '../components/SectionHeading';
 import { cx } from '../cx';
 import motion from '../motion/motion.module.css';
@@ -31,7 +32,11 @@ export function Space() {
             >
               <figure>
                 <div className={cx(styles.frame, motion.zoom)}>
-                  <Photo photo={photo} className={styles.photo} />
+                  <Photo
+                    photo={photo}
+                    sizes={index === 0 ? PHOTO_SIZES.galleryLarge : PHOTO_SIZES.gallerySmall}
+                    className={styles.photo}
+                  />
                 </div>
                 {caption && <figcaption className={styles.caption}>{caption}</figcaption>}
               </figure>

@@ -1,0 +1,4 @@
+# Cabeçalhos do Cloudflare Pages (spec 005, D6).
+# As fotos têm nome único (código gerado + largura): podem ficar guardadas por um ano.
+/fotos/*
+  Cache-Control: public, max-age=31536000, immutable

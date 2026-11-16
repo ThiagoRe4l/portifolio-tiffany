@@ -2,6 +2,7 @@ import { useContent } from '@/content/ContentProvider';
 import { headingIdFor, SECTION_IDS } from '../anchors';
 import { Icon } from '../components/Icon';
 import { Photo } from '../components/Photo';
+import { PHOTO_SIZES } from '../photoSizes';
 import { SectionHeading } from '../components/SectionHeading';
 import { cx } from '../cx';
 import type { IconName } from '../icons/paths';
@@ -31,7 +32,7 @@ export function About() {
         />
 
         <div ref={reveal} className={cx(styles.media, motion.reveal)}>
-          <Photo photo={sobre.photo} className={styles.photo} />
+          <Photo photo={sobre.photo} sizes={PHOTO_SIZES.about} className={styles.photo} />
         </div>
 
         <div className={styles.body}>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { SECTION_KEYS, sectionSchemas } from '@/content/schema';
 import type { SectionKey } from '@/content/types';
@@ -64,6 +64,21 @@ export function AdminEditorPage() {
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [focusRequest, setFocusRequest] = useState(0);
   const [pending, setPending] = useState<PendingAction | null>(null);
+  // Fotos sendo preparadas ou enviadas (005), pelo caminho do campo.
+  const [uploading, setUploading] = useState<ReadonlySet<string>>(() => new Set());
+  const photoUploads = useMemo(
+    () => ({
+      onBusyChange: (key: string, busy: boolean) =>
+        setUploading((current) => {
+          const next = new Set(current);
+          if (busy) next.add(key);
+          else next.delete(key);
+          return next;
+        }),
+      onSessionExpired: () => void expireSession(),
+    }),
+    [expireSession],
+  );
   const saving = useRef(false);
   const formArea = useRef<HTMLDivElement>(null);
   const errors = state.errors?.section === section ? state.errors.map : EMPTY_ERRORS;
@@ -143,7 +158,7 @@ export function AdminEditorPage() {
   }
 
   async function save() {
-    if (saving.current || !state.sections) return;
+    if (saving.current || uploading.size > 0 || !state.sections) return;
     const normalized = normalizeSection(TREES[section], value);
     const result = validateSection(sectionSchemas[section], normalized);
     if (!result.ok) {
@@ -245,6 +260,7 @@ export function AdminEditorPage() {
                 errors={errors}
                 provisional={placeholderPaths(section, normalizeSection(TREES[section], value))}
                 onChange={(path, next) => dispatch({ type: 'edit', section, path, value: next })}
+                photos={photoUploads}
               />
             </div>
           </>
@@ -254,6 +270,7 @@ export function AdminEditorPage() {
         <ActionBar
           dirty={dirty}
           saving={state.saving}
+          blocked={uploading.size > 0}
           onDiscard={() => guard({ kind: 'discard' })}
           onSave={() => void save()}
         />

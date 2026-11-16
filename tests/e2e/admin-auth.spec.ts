@@ -80,6 +80,8 @@ test.describe('fluxos', () => {
 
     await page.goto('/admin');
     await expect(page.getByRole('heading', { level: 1, name: 'Editar site' })).toBeVisible();
+    // O editor (004) busca o conteúdo ao abrir: recarregar no meio, o WebKit registra erro.
+    await expect(page.getByRole('combobox', { name: /Seção do site/ })).toBeVisible();
     await page.reload();
     await expect(page.getByRole('heading', { level: 1, name: 'Editar site' })).toBeVisible();
 

@@ -17,6 +17,8 @@ export type SupabaseMock = {
   content: Map<string, ContentRow>;
   /** Corpo de cada gravação em `site_content`. */
   writes: { method: string; section: string | null; body: Record<string, unknown> }[];
+  /** Storage em memória (spec 005): caminho dentro do bucket → tipo e bytes enviados. */
+  uploads: Map<string, { type: string; bytes: Buffer }>;
 };
 
 export type ContentRow = { data: unknown; updated_at: string };
@@ -59,6 +61,7 @@ export async function mockSupabase(page: Page, options: Options = {}): Promise<S
       ]),
     ),
     writes: [],
+    uploads: new Map(),
   };
   const admin = options.admin ?? 'listed';
 
@@ -77,6 +80,26 @@ export async function mockSupabase(page: Page, options: Options = {}): Promise<S
 
     const key = `${request.method()} ${url.pathname}`;
     mock.calls.push(key);
+
+    // Storage (spec 005): envio guardado em memória e servido pelo endereço público.
+    const upload = /^\/storage\/v1\/object\/site-photos\/(.+)$/.exec(url.pathname);
+    if (upload?.[1] && request.method() === 'POST') {
+      mock.uploads.set(upload[1], {
+        type: request.headers()['content-type'] ?? '',
+        bytes: request.postDataBuffer() ?? Buffer.alloc(0),
+      });
+      return route.fulfill({ status: 200, headers, json: { Key: `site-photos/${upload[1]}` } });
+    }
+    const download = /^\/storage\/v1\/object\/public\/site-photos\/(.+)$/.exec(url.pathname);
+    if (download?.[1] && request.method() === 'GET') {
+      const stored = mock.uploads.get(download[1]);
+      if (!stored) return route.fulfill({ status: 404, headers, body: '' });
+      return route.fulfill({
+        status: 200,
+        headers: { ...headers, 'content-type': stored.type },
+        body: stored.bytes,
+      });
+    }
     const json = (body: unknown, status = 200) => route.fulfill({ status, headers, json: body });
 
     switch (key) {

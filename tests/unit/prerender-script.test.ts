@@ -26,6 +26,18 @@ export async function prerender({ env, template }) {
 }
 `;
 
+// Spec 005, T07: as fotos chegam como bytes e vão para dist/fotos/.
+const PHOTOS_ENTRY = `
+export async function prerender({ template }) {
+  return {
+    source: 'supabase',
+    warnings: [],
+    files: { 'index.html': template },
+    binaryFiles: { 'fotos/abc-480w.webp': new Uint8Array([1, 2, 3]) },
+  };
+}
+`;
+
 const FAILING_ENTRY = `
 export async function prerender() {
   throw new Error('Falha ao ler o conteúdo do Supabase: HTTP 503');
@@ -78,6 +90,15 @@ describe('runPrerender', () => {
     expect(readFileSync(join(distDir, 'index.html'), 'utf8')).toContain('<title>ok</title>');
     expect(readFileSync(join(distDir, 'admin.html'), 'utf8')).toBe('admin');
     expect(readFileSync(join(distDir, 'robots.txt'), 'utf8')).toBe('site=https://exemplo.com.br');
+  });
+
+  it('grava as fotos em dist/fotos/, criando a pasta, com os bytes exatos', async () => {
+    const { distDir, serverEntry } = fakeBuild(PHOTOS_ENTRY);
+
+    const result = await runPrerender({ distDir, serverEntry, env: {} });
+
+    expect(result.written).toContain('fotos/abc-480w.webp');
+    expect([...readFileSync(join(distDir, 'fotos', 'abc-480w.webp'))]).toEqual([1, 2, 3]);
   });
 
   it('sem dist/index.html, explica que o vite build precisa rodar antes', async () => {

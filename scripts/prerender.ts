@@ -4,16 +4,18 @@
  * Uso: `node scripts/prerender.ts [--dist pasta] [--server arquivo]`.
  * As variáveis vêm do ambiente (na hospedagem) ou do `.env` (`--env-file-if-exists`).
  */
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseArgs } from 'node:util';
 
 type PrerenderModule = {
-  prerender(options: {
-    env: Record<string, string | undefined>;
-    template: string;
-  }): Promise<{ files: Record<string, string>; warnings: string[]; source: string }>;
+  prerender(options: { env: Record<string, string | undefined>; template: string }): Promise<{
+    files: Record<string, string>;
+    binaryFiles?: Record<string, Uint8Array>;
+    warnings: string[];
+    source: string;
+  }>;
 };
 
 export type RunPrerenderOptions = {
@@ -30,12 +32,26 @@ export async function runPrerender(options: RunPrerenderOptions) {
   const template = readFileSync(templatePath, 'utf8');
 
   const entry = (await import(pathToFileURL(resolve(options.serverEntry)).href)) as PrerenderModule;
-  const { files, warnings, source } = await entry.prerender({ env: options.env, template });
+  const {
+    files,
+    binaryFiles = {},
+    warnings,
+    source,
+  } = await entry.prerender({
+    env: options.env,
+    template,
+  });
 
   for (const [name, text] of Object.entries(files)) {
     writeFileSync(resolve(options.distDir, name), text);
   }
-  return { written: Object.keys(files), warnings, source };
+  // Spec 005: fotos copiadas do Supabase, em dist/fotos/.
+  for (const [name, bytes] of Object.entries(binaryFiles)) {
+    const target = resolve(options.distDir, name);
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, bytes);
+  }
+  return { written: [...Object.keys(files), ...Object.keys(binaryFiles)], warnings, source };
 }
 
 /**

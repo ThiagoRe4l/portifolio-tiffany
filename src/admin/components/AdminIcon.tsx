@@ -11,7 +11,8 @@ export type AdminIconName =
   | 'lock'
   | 'logout'
   | 'plus'
-  | 'trash';
+  | 'trash'
+  | 'upload';
 
 const EYE = (
   <>
@@ -25,6 +26,7 @@ const SHAPES: Record<AdminIconName, ReactNode> = {
   arrowUp: <path d="M12 19V5M6 11l6-6 6 6" />,
   arrowDown: <path d="M12 5v14M6 13l6 6 6-6" />,
   plus: <path d="M12 5v14M5 12h14" />,
+  upload: <path d="M12 16V4M7 9l5-5 5 5M5 20h14" />,
   check: <path d="M5 12.5l4.5 4.5L19 7.5" />,
   close: <path d="M6 6l12 12M18 6L6 18" />,
   trash: <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3" />,

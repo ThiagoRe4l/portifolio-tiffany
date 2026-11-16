@@ -86,6 +86,35 @@ describe('imagem de compartilhamento ausente', () => {
   });
 });
 
+// Spec 005, T07 (RF-13; CA-12): a foto copiada para o site tem endereço relativo.
+describe('imagem de compartilhamento copiada para o site', () => {
+  const withLocalImage = () => {
+    const copy = structuredClone(defaultContent);
+    copy.geral.shareImage = {
+      src: '/fotos/abc-1600w.webp',
+      width: 1600,
+      height: 1200,
+      alt: 'Fachada',
+    };
+    return copy;
+  };
+
+  it('com SITE_URL: endereço completo, como as redes exigem', () => {
+    const doc = parseHead(renderSiteHead(withLocalImage(), SITE_URL));
+
+    expect(meta(doc, 'property="og:image"')).toBe(`${SITE_URL}/fotos/abc-1600w.webp`);
+    expect(meta(doc, 'property="og:image:width"')).toBe('1600');
+    expect(meta(doc, 'name="twitter:card"')).toBe('summary_large_image');
+  });
+
+  it('sem SITE_URL: sai sem a imagem, porque endereço relativo não serve às redes', () => {
+    const doc = parseHead(renderSiteHead(withLocalImage()));
+
+    expect(doc.querySelector('meta[property^="og:image"]')).toBeNull();
+    expect(meta(doc, 'name="twitter:card"')).toBe('summary');
+  });
+});
+
 describe('escape', () => {
   it('aspas, < e & no conteúdo não quebram as tags', () => {
     const content = makeUniqueContent();

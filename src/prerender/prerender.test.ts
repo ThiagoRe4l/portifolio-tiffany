@@ -192,3 +192,53 @@ describe('prerender com Supabase', () => {
     await expect(run({ SITE_URL: 'psicologa.com' })).rejects.toThrow(/SITE_URL inválida/);
   });
 });
+
+// Spec 005, T07 (D6; CA-11): as fotos do bucket entram no site publicado.
+describe('prerender com fotos do bucket', () => {
+  const CODE = '3f6c2a1e-7b4d-4e2a-9c1f-0a1b2c3d4e5f';
+  const BUCKET = `${SUPABASE.VITE_SUPABASE_URL}/storage/v1/object/public/site-photos/fotos`;
+
+  function routes(photoStatus = 200): typeof fetch {
+    return (async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes('/rest/v1/site_content')) {
+        const inicio = {
+          ...defaultContent.inicio,
+          photo: {
+            ...defaultContent.inicio.photo,
+            src: `${BUCKET}/${CODE}-1600w.webp`,
+            width: 1600,
+            height: 1200,
+          },
+        };
+        return Response.json([{ section: 'inicio', data: inicio }]);
+      }
+      return new Response(new Uint8Array([1, 2, 3]), { status: photoStatus });
+    }) as typeof fetch;
+  }
+
+  it('devolve as versões como arquivos binários e o site usa /fotos/', async () => {
+    const result = await run({ ...SUPABASE, REQUIRE_REMOTE_CONTENT: 'true' }, routes());
+    const doc = parse(result.files['index.html'] ?? '');
+    const hero = doc.querySelector<HTMLImageElement>('#inicio img');
+
+    expect(Object.keys(result.binaryFiles).sort()).toEqual(
+      [`fotos/${CODE}-1600w.webp`, `fotos/${CODE}-480w.webp`, `fotos/${CODE}-960w.webp`].sort(),
+    );
+    expect(hero?.getAttribute('src')).toBe(`/fotos/${CODE}-1600w.webp`);
+    expect(hero?.getAttribute('srcset')).toContain(`/fotos/${CODE}-480w.webp 480w`);
+    const embedded = doc.getElementById(EMBEDDED_CONTENT_ID)?.textContent ?? '';
+    expect(embedded).toContain(`/fotos/${CODE}-1600w.webp`);
+    expect(embedded).not.toContain('supabase.co');
+  });
+
+  it('foto que não baixa com conteúdo obrigatório: o build falha', async () => {
+    await expect(run({ ...SUPABASE, REQUIRE_REMOTE_CONTENT: 'true' }, routes(503))).rejects.toThrow(
+      /Falha ao copiar a foto/,
+    );
+  });
+
+  it('sem Supabase: nenhum arquivo binário', async () => {
+    expect((await run({})).binaryFiles).toEqual({});
+  });
+});

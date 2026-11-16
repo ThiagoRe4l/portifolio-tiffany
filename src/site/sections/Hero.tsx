@@ -4,6 +4,7 @@ import { headingIdFor, hrefTo, SECTION_IDS } from '../anchors';
 import { ButtonLink } from '../components/ButtonLink';
 import { Icon } from '../components/Icon';
 import { Photo } from '../components/Photo';
+import { PHOTO_SIZES } from '../photoSizes';
 import { cx } from '../cx';
 import motion from '../motion/motion.module.css';
 import { stagger } from '../motion/stagger';
@@ -60,7 +61,7 @@ export function Hero() {
         </div>
 
         <div className={cx(styles.media, enter)} style={stagger(4)}>
-          <Photo photo={inicio.photo} priority className={styles.photo} />
+          <Photo photo={inicio.photo} priority sizes={PHOTO_SIZES.hero} className={styles.photo} />
           <p className={styles.badge}>
             <span className={styles.badgeIcon}>
               <Icon name={BADGE_ICON} size={18} />

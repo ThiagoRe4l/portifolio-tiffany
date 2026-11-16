@@ -98,6 +98,52 @@
   gap: 16px;
 }
 
+.photoRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.photoActions {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.photoButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 18px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: var(--fw-semibold);
+  cursor: pointer;
+}
+
+.photoButton:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+/* O botão abre a escolha de arquivo; o campo nativo fica fora da tela e do Tab. */
+.fileInput {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .photoButton:not(:disabled):hover {
+    background: var(--color-primary-soft);
+  }
+}
+
 .thumbnail {
   display: block;
   width: 120px;
