@@ -1,6 +1,6 @@
 # 005 — Imagens · plano técnico
 
-> Status: **aprovado no Gate 2** (2026-11-15)
+> Status: **concluído** (2026-11-16) · Gate 2 aprovado em 2026-11-15
 > Data: 2026-11-15 · Spec: `spec.md` (Gate 1 aprovado em 2026-11-15, com as cinco recomendações)
 
 ## Decisões do Gate 1

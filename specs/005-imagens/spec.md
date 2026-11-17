@@ -1,6 +1,6 @@
 # 005 — Imagens: envio e otimização das fotos
 
-> Status: **aprovada no Gate 1** (2026-11-15), com as recomendações das cinco perguntas.
+> Status: **concluída** (2026-11-16). Gate 1 aprovado em 2026-11-15, com as recomendações das cinco perguntas.
 > Data: 2026-11-13 · Depende de: 001 a 004 (concluídas)
 > Referência visual: `docs/design/admin-editor-sobre.png` (bloco "Foto da seção" com "Trocar foto"). Em conflito: CLAUDE.md/spec > design.
 

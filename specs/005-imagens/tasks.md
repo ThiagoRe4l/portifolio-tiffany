@@ -97,7 +97,36 @@
   - axe, rolagem e toque no campo de foto;
   - `srcset` no site com conteúdo de teste.
 
-### T09 — Configuração real e fechamento `[ ] pendente`
+### T09 — Configuração real e fechamento `[x] concluída`
 - **Faz:** o Thiago segue o roteiro do `plan.md`; quadro de CAs.
 - **Cobre:** CA-09, CA-11, CA-12 e CA-13 no ambiente real.
 - **Verificação:** `npm run check`, `format:check` e E2E completos; foto real publicada e servida de `/fotos/`; Lighthouse com fotos.
+- **Conferido pelo Thiago (2026-11-16):** migration aplicada e bucket `site-photos` público, com 2 MB e só WebP e JPG; no banco, visitante anônimo e conta fora de `admins` recebem erro ao inserir no bucket, e a conta dela insere (tudo desfeito com `rollback`); foto do celular trocada no admin publicado chega ao site com endereço em `/fotos/`; Lighthouse mobile com as fotos reais dentro das metas (ele confirmou as metas, sem anotar as notas).
+
+---
+
+## Quadro de critérios de aceite
+
+Estado em 2026-11-16: Vitest 1452/1452; `npm run check` e `format:check` sem erros; E2E 433 aprovados e 5 pulados de propósito; JS inicial do site 75,2 KB gzip (antes 74,7); pacote do admin 129,9 KB gzip (antes 127,8).
+
+| CA | Situação | Prova |
+|---|---|---|
+| CA-01 | ok | `PhotoField.upload.test.tsx`, `AdminEditorPage.photos.test.tsx`; E2E (salvar e recarregar) e teste real |
+| CA-02 | ok | `preparePhoto.test.ts` (tipo e tamanho); E2E (GIF) |
+| CA-03 | ok | `preparePhoto.test.ts`; E2E com foto 4000×3000, retrato e localização no EXIF, nos três aparelhos |
+| CA-04 | ok | `image.test.ts`, `preparePhoto.test.ts`; E2E (300×200) |
+| CA-05 | ok | `PhotoField.upload.test.tsx`; `AdminEditorPage.photos.test.tsx` (salvar e descartar indisponíveis) |
+| CA-06 | ok | `PhotoField.upload.test.tsx`; E2E |
+| CA-07 | ok | `PhotoField.upload.test.tsx`, `photoApi.test.ts`, `photoMessages.test.ts`; sessão expirada volta ao login |
+| CA-08 | ok | `AdminEditorPage.photos.test.tsx` ("Descartar" volta à foto anterior) |
+| CA-09 | ok | `photos-migration.test.ts` e conferência no banco real |
+| CA-10 | ok | `Photo.srcset.test.tsx`, `photos.sizes.test.tsx`, `photoSizes.test.ts`; E2E (versão escolhida cobre a área) |
+| CA-11 | ok | `photos.test.ts`, `prerender-script.test.ts`, `headers-file.test.ts`; foto real servida de `/fotos/` |
+| CA-12 | ok nos testes | `head.test.ts` (`og:image` absoluto, largura e altura); a imagem de compartilhamento não foi trocada no teste real |
+| CA-13 | ok | E2E nos três aparelhos (axe, rolagem, toque); Lighthouse real dentro das metas |
+
+### Desvios e decisões registrados
+- Envio dos bytes direto, sem formulário (T04).
+- Escolher o mesmo arquivo de novo só é provado no E2E: o jsdom não reproduz o navegador nisso (T05).
+- `sizes` passaram a considerar a altura das áreas recortadas: a foto principal no Pixel 7 baixava 960 px quando precisava de cerca de 1400 (T08).
+- Fotos sem uso continuam no Storage; não há botão de remover nem recorte (decisões do Gate 1).
