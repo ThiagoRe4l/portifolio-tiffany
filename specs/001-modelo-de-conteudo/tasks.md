@@ -203,7 +203,7 @@ Ordem: T01 → T02 → T03 vêm primeiro (o contrato). T04 e T05 são independen
   - usa só `vars.SUPABASE_URL` e `vars.SUPABASE_ANON_KEY`, nenhum `secrets.` e nenhum `service_role`;
   - o `curl --fail` vai para `/rest/v1/site_content` com o header `apikey`;
   - o job tem um `if:` que o pula quando as variáveis não existem.
-- **Depois do push** (com você): cadastrar as duas variáveis em *Settings → Secrets and variables → Actions → Variables* e disparar uma vez à mão.
+- **Depois do push** (com você): cadastrar as duas variáveis em *Settings → Secrets and variables → Actions → Variables* e disparar uma vez à mão. **Feito pelo Thiago em 2026-11-16:** variáveis cadastradas e execução manual verde.
 
 ### T13 — Fechamento da spec `[x] concluída` (2026-11-07)
 - **Resultado**: `CLAUDE.md` §5 com "Validação" **Definido (spec 001)**; status da spec, do plano e das tarefas como concluídos; quadro de critérios e pendências abaixo.
@@ -256,7 +256,7 @@ Tarefa acrescentada depois do fechamento, com autorização do Thiago ("pode faz
 | CA-16 robôs e noindex | `files.test.ts`, `head.test.ts`, `content-dev-plugin.test.ts`, E2E | ✅ |
 | CA-17 link do WhatsApp | `whatsapp.test.ts` | ✅ |
 | CA-18 tabela e RLS | `migration.test.ts` + curl real | ✅ (a trava das 8 seções será exercitada na 003) |
-| CA-19 keep-alive | `keep-alive-workflow.test.ts` + curl local | ⏳ execução no GitHub depois do push |
+| CA-19 keep-alive | `keep-alive-workflow.test.ts` + curl local | ✅ execução manual no GitHub verde (2026-11-16) |
 | CA-20 JSON-LD | `jsonLd.test.ts`, `prerender.test.ts` | ✅ |
 | CA-21 exposição de variáveis | `env-exposure.test.ts` | ✅ |
 

@@ -107,7 +107,7 @@
 - **Cobre:** CA-09, CA-12 e CA-13 no ambiente real.
 - **Verificação:** `npm run check`, `format:check` e E2E completos; editar e publicar no site real.
 - **Conferido pelo Thiago (2026-11-13):** deploy hook, Vault, migration, `REQUIRE_REMOTE_CONTENT=true` e alerta no Cloudflare; gravação com autor e data preenchidos pelo banco; `private.request_deploy()` com resposta 200; editar no admin publicado dispara um deploy novo e o texto chega ao site; agendamento anual no `cron.job`.
-- **Achado no teste real:** o segredo do Vault foi criado com o endereço e o nome trocados (e com o comando `curl` inteiro). A função não achava `cloudflare_deploy_hook`, só registrava o aviso e não chamava o Cloudflare, por isso as gravações não publicavam. Corrigido no banco; o roteiro do `plan.md` ficou mais explícito. Recomendado ao Thiago trocar o deploy hook, porque o endereço ficou um tempo no campo de nome, sem criptografia.
+- **Achado no teste real:** o segredo do Vault foi criado com o endereço e o nome trocados (e com o comando `curl` inteiro). A função não achava `cloudflare_deploy_hook`, só registrava o aviso e não chamava o Cloudflare, por isso as gravações não publicavam. Corrigido no banco; o roteiro do `plan.md` ficou mais explícito. Recomendado ao Thiago trocar o deploy hook, porque o endereço ficou um tempo no campo de nome, sem criptografia. **Trocado em 2026-11-16:** hook novo no Cloudflare, segredo atualizado no Vault com `vault.update_secret`, `private.request_deploy()` disparou o deploy, e o hook antigo foi apagado.
 
 ---
 
